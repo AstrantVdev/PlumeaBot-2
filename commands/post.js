@@ -7,6 +7,7 @@ const tUtils = require("../utils/text")
 const uuidCreate = require("uuid");
 const pdf = require("../utils/pdf")
 const { config } = require('../config')
+const oUtils = require("../utils/opinion")
 
 module.exports = {
 	data(){
@@ -55,6 +56,7 @@ module.exports = {
 
                 if(await somesUtils.isWeeklyResetTime()){
                     await mUtils.resetAllWeeklyWords()
+                    await oUtils.resetWeeklyPlumes()
                     await somesUtils.setWeeklyResetDate()
                 }
 
@@ -112,7 +114,7 @@ module.exports = {
 
         if(await mUtils.toMuchWeeklyWords(id, words)){
             const weekly = await mUtils.getWeeklyWords(id)
-            await mes.interError(inter, "NO ! Pas plus de 16k par semaine\nMots: "+words+" | Mots de la semaine: "+weekly, 0, true)
+            await mes.interError(inter, "NO ! Pas plus de 16k par semaine\nMots: " + words + " | Mots de la semaine: "+weekly, 0, true)
 
             await mUtils.removeFileInPostingMes(id)
             return null

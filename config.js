@@ -1,6 +1,8 @@
 module.exports = {
     config: 
     {
+        weeklyPlumes: 1,
+
         messages: {
             leaderboard: '1080134170124222587',
             tutoPost: 'https://discord.com/channels/1066783578140180520/1066783579079716895/1075837538595520655',
@@ -79,7 +81,8 @@ module.exports = {
 
         emotes: {
             plume: '❤️',
-            love: '❤️'
+            love: '❤️',
+            chad: '❤️'
         },
 
         roles: {
@@ -107,7 +110,7 @@ module.exports = {
                 id: '1080135772671311882'
             },
             {
-                name: 'Fantasy ',
+                name: 'Fantasy',
                 desc: 'Plonge dans les histoires de mondes imaginaires, créatures mystiques et autres épopées magiques',
                 id: '1080136122161696819'
             },

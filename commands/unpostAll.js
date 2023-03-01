@@ -11,6 +11,11 @@ module.exports = {
             .addUserOption(option => option
                 .setName("user")
                 .setDescription("L'utilisateur qui va perdre tout ses textes postés"))
+            .addStringOption(option => option
+                .setName("id_title")
+                .setDescription("L'id du texte ex : MANIKA")
+                .setMinLength(6)
+                .setMaxLength(6))
 
     },
 
@@ -27,7 +32,14 @@ module.exports = {
             }
         }catch(e){}
 
-        const textsUUIDs = await m.getTextsUUIDs(userId)
+        let where = { authorId: userId }
+
+        try{
+            where.id_text_title = inter.options.getString("id_title")
+
+        }catch(e){}
+
+        const textsUUIDs = await T_TAB.findOne({ where: where, attributes: ['textsUUIDs'], raw: true })
 
         if(textsUUIDs.length !== 0){
 
@@ -40,7 +52,7 @@ module.exports = {
             await mes.interSuccess(inter)
 
         }else{
-            await mes.interError(inter, "Cet utilisateur n'a pas de texte !")
+            await mes.interError(inter, "Aucun texte trouvé, l'id_title est peut-etre erroné")
 
         }
 

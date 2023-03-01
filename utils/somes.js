@@ -46,7 +46,7 @@ module.exports = {
         const today = new Date()
         const resetDay = await this.getWeeklyResetDate()
 
-        return today > resetDay;
+        return today > resetDay
 
     },
 

@@ -2,6 +2,8 @@ const db = require("../dbObjects")
 const m = require("./member");
 const {config} = require("../config");
 const mes = require("./message");
+const somes = require("../utils/somes")
+const {dirname} = require("path");
 
 module.exports = {
 
@@ -33,6 +35,9 @@ module.exports = {
         const counter = await client.channels.fetch(config.channels.counter)
         await this.addPlumesTotal(p)
 
+        await this.addWeeklyPlumes(p)
+        require("../config").config.weeklyWords += p
+
         counter.setName("MOTS LUS : " + await this.getPlumesTotal() + "k")
 
         await mes.sendMes(config.channels.plumes, { embeds: [embed] })
@@ -45,6 +50,18 @@ module.exports = {
 
     async getPlumesTotal(){
         return db.tabGetAtr(PIDS_TAB, 'plumesTotal', 'paramId')
+    },
+
+    async resetWeeklyPlumes(){
+        await db.tabSetAtr(PIDS_TAB, 'weeklyPlumes', 'paramId', 0)
+    },
+
+    async addWeeklyPlumes(weeklyPlumes){
+        await db.tabIncrementAtr(PIDS_TAB, 'weeklyPlumes', 'paramId', weeklyPlumes)
+    },
+
+    async getWeeklyPlumes(){
+        return db.tabGetAtr(PIDS_TAB, 'weeklyPlumes', 'paramId')
     },
 
     memberOpinionExist(textUUID, id){
