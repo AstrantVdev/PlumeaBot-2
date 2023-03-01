@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ed3c73e2-02b6-48df-b328-379894b6a724" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/post.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/post.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/unpostAll.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/unpostAll.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dbObjects.js" beforeDir="false" afterPath="$PROJECT_DIR$/dbObjects.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/events/messageCreate.js" beforeDir="false" afterPath="$PROJECT_DIR$/events/messageCreate.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/opinion.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils/opinion.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/somes.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils/somes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/selectMenus/inactivesCheck.js" beforeDir="false" afterPath="$PROJECT_DIR$/selectMenus/inactivesCheck.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

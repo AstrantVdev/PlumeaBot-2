@@ -31,7 +31,6 @@ module.exports = {
     },
 
     async get(inactivesIds, inter){
-        const members = inter.guild.members
 
         let menu = new StringSelectMenuBuilder()
             .setCustomId(this.name)
@@ -39,9 +38,9 @@ module.exports = {
 
         let nothing = true
         await inactivesIds.forEach(async id => {
-            const m = await members.fetch(id)
+            const m = await inter.guild.members.fetch(id)
 
-            if(m.roles.cache.size <= 6666666666666){
+            if(m.roles.cache.size <= 2){
                 menu.addOptions({ label: m.user.tag, description: id, value: id })
                 nothing = false
 
