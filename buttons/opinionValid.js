@@ -30,7 +30,7 @@ module.exports = {
         const textUUID = await oUtils.getTextUUID(uuid)
         const fileMes = await tUtils.getFileMes(textUUID)
 
-        const message = await oUtils.confirm(inter.guild.members.fetch(senderId), p, `[${textUUID}](${fileMes.url})`, member, inter)
+        const message = await oUtils.confirm(await inter.guild.members.fetch(senderId), p, `[${textUUID}](${fileMes.url})`, member, inter)
 
         const button = new ActionRowBuilder()
             .setComponents(

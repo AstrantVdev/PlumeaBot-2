@@ -38,7 +38,8 @@ module.exports = {
                     [Op.lt]: limit
                 }
             },
-            attributes: ['id']
+            attributes: ['id'],
+            raw: true
         })
     },
 
@@ -98,7 +99,7 @@ module.exports = {
 
     async toMuchWeeklyWords(id, words){
         const weekly = await this.getWeeklyWords(id)
-        return weekly + words > 666666;
+        return weekly + words > 16000;
 
     },
 

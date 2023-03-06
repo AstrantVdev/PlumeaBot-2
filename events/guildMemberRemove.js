@@ -11,7 +11,6 @@ module.exports = {
         const id = member.id
 
         if(await m.exists(id)){
-            await m.removeMember(id)
 
             const textsUUIDs = await m.getTextsUUIDs(id)
 
@@ -24,6 +23,8 @@ module.exports = {
                 await m.removeAllTextsUUIDs(id)
 
             }
+
+            await m.removeMember(id)
 
         }
 

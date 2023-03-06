@@ -43,7 +43,7 @@ module.exports = {
 
                 case config.channels.general:
                     const today = new Date()
-                    const recall = getBumpDate()
+                    const recall = await getBumpDate()
     
                     if(today > recall){
                         message.reply('***Bumpy ! :3***')
@@ -55,12 +55,24 @@ module.exports = {
 
             }
 
+<<<<<<< HEAD
             if (message.member.roles.cache.size < 2){
+=======
+            try{
 
-                if (message.attachments.size >= 0 || message.content.includes('http')){
-                    message.delete()
-                    await author.send('__**Impossible d~envoyer ce message :**__```md\n#Tu ne peux poster ni lien, ni fichier, ni gif sans n~avoir jamais gagné de plumes :D```')
+                if (message.member.roles.cache.size < 3){
+
+                    if (message.attachments.size > 0 || message.content.includes('http')){
+                        await message.delete()
+                        await author.send('__**Impossible d~envoyer ce message :**__```md\n#Tu ne peux poster ni lien, ni fichier, ni gif sans n~avoir jamais gagné de plumes :D```')
+                    }
+>>>>>>> main
+
                 }
+
+            }catch(e){
+                console.log(e)
+                console.log(message)
 
             }
 
@@ -89,17 +101,13 @@ module.exports = {
             if(id === 302050872383242240){
                 const embeds = message.embeds
 
-                embeds.forEach(embed =>{
+                if(embeds[0].data.description.includes('Bump effectué !')){
+                    const recall = new Date()
+                    recall.setHours(('0' + (recall.getHours() + 2)).slice(-2))
+                    recall.setMinutes(('0' + (recall.getMinutes() + 30)).slice(-2))
 
-                    if(embed.data.description.includes('Bump effectué !')){
-                        const recall = new Date()
-                        recall.setHours(('0' + (recall.getHours() + 2)).slice(-2))
-                        recall.setMinutes(('0' + (recall.getMinutes() + 30)).slice(-2))
-        
-                        setBumpDate(recall)
-                    }
-
-                })
+                    await setBumpDate(recall)
+                }
 
             }
 

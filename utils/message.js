@@ -180,12 +180,12 @@ module.exports = {
     },
 
     chooseInterMessageTitle(inter){
-        let title = { }
+        let title = { files: [] }
         let options = []
 
         if(inter.isChatInputCommand()){
             title.content = '/ ' + inter.commandName
-            const cmdOptions = inter._hoistedOptions
+            const cmdOptions = inter.options._hoistedOptions
 
             if(cmdOptions){
                 cmdOptions.forEach(o => {
@@ -340,7 +340,7 @@ module.exports = {
         let content = ''
         if(level === 1){ content += `<@&${config.roles.dev}>` }
 
-        await this.sendMes(config.channels.logs, { content: content, embeds: [embed2] })
+        await this.sendMes(config.channels.logs, { content: content, embeds: [embed2], files: title.files })
 
     },
     

@@ -23,7 +23,7 @@ module.exports = {
             const postChannelId = await tUtils.getPostId(textUUID)
             const postChannel = await client.channels.fetch(postChannelId)
 
-            await postChannel.setAppliedTags(await tUtils.getThemesIdsByNames(themes))
+            await postChannel.setAppliedTags(tUtils.getThemesIdsByNames(themes))
 
             await mes.interSuccess(inter)
         }

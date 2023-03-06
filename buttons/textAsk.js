@@ -12,7 +12,7 @@ module.exports = {
 
         let date = await rUtils.getMemberRequestDate(id, textId)
         if(! date){
-            const message = await rUtils.sendMes(id, textId)
+            const message = await rUtils.sendMes(inter.member.user, textId)
             await rUtils.addOne(message.id, id, textId)
 
             await mes.interSuccess(inter, "L'accès à ce texte est limité. Une demande a été faite dans le salon <#" + config.channels.textRequest + ">")

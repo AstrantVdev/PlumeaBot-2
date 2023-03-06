@@ -18,7 +18,7 @@ module.exports = {
             const menu = await require("../selectMenus/inactivesCheck").get(inactivesIds, inter)
 
             if(menu){
-                await mes.interSuccess(inter, { components: [menu] })
+                await mes.interSuccess(inter, { content: "ca dégage", components: menu })
                 return
             }
 

@@ -21,7 +21,8 @@ module.exports = {
         const plumeRole = config.roles.plumeen
 
         if(member.roles.cache.has(plumeRole)){
-            inter.reply({ content: 'Tu fais quoi là -_-', ephemeral: true })
+            await mes.interError(inter, 'Tu fais quoi là -_-')
+            return
 
         }else{
 

@@ -91,7 +91,10 @@ module.exports = {
                     const button = require('../buttons/textNick').get(uuid)
                     await mes.interSuccess(
                         inter,
-                        {content: "Entre ton pseudo pluméen \n __Appuis sur le bouton__  ↓↓↓", components: [button] },
+                        {
+                            content: "Entre ton pseudo pluméen \n __Appuis sur le bouton__  ↓↓↓",
+                            components: [button]
+                        },
                         true)
 
                 }
