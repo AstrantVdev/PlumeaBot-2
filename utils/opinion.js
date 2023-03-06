@@ -35,14 +35,10 @@ module.exports = {
         const counter = await client.channels.fetch(config.channels.counter)
         await this.addPlumesTotal(p)
 
-<<<<<<< HEAD
         await this.addWeeklyPlumes(p)
         require("../config").config.weeklyWords += p
 
-        counter.setName("MOTS LUS : " + await this.getPlumesTotal() + "k")
-=======
         counter.setName("PLUMES : " + await this.getPlumesTotal())
->>>>>>> main
 
         return await mes.sendMes(config.channels.plumes, { embeds: [embed] })
 

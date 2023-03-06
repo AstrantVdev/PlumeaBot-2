@@ -55,9 +55,6 @@ module.exports = {
 
             }
 
-<<<<<<< HEAD
-            if (message.member.roles.cache.size < 2){
-=======
             try{
 
                 if (message.member.roles.cache.size < 3){
@@ -66,7 +63,6 @@ module.exports = {
                         await message.delete()
                         await author.send('__**Impossible d~envoyer ce message :**__```md\n#Tu ne peux poster ni lien, ni fichier, ni gif sans n~avoir jamais gagné de plumes :D```')
                     }
->>>>>>> main
 
                 }
 
@@ -75,6 +71,7 @@ module.exports = {
                 console.log(message)
 
             }
+
 
             if(message.channel.parentId === config.channels.textForum){
 
