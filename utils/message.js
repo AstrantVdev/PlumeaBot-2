@@ -7,6 +7,7 @@ module.exports = {
         blue: "00112B",
         red: "D52B1E",
         yellow: "FFB612",
+        green: "82BE00"
 
     },
 
@@ -245,56 +246,6 @@ module.exports = {
         mes.components[0].components[index] = comp
 
         await mes.edit({ components: mes.components })
-
-    },
-
-    async interError(inter, error, level = 0, defer = false, link = null){
-        let errorMes = 'Une erreur est survenue, vous pouvez contacter <@548551538487066629> pour vous aider'
-
-        if(error){
-
-            if(error.content){
-                errorMes = error.content
-            }else{
-                errorMes = error
-
-            }
-
-        }
-
-        let color = this.colors.yellow
-        if (level === 1){
-            color = this.colors.red
-            errorMes += "\nContacte <@548551538487066629>"
-        }
-
-        const embed = this.newEmbed()
-            .setTitle("Error ;-;")
-            .setDescription(`${errorMes}`)
-
-        if(link){
-            embed.setImage(link)
-        }
-
-        let reply = { embeds: [embed], ephemeral: true }
-        if(error.components){ reply.components = error.components }
-
-        if(defer) {
-            await inter.editReply(reply)
-        }else{
-            await inter.reply(reply)
-        }
-
-        const title = this.chooseInterMessageTitle(inter)
-        const embed2 = this.newEmbed(color)
-            .setTitle(title.content)
-            .setDescription(`**Error** | ${inter.member.user} | <#${inter.channel.id}>
-                            \`\`\`${error}\`\`\``)
-
-        let content = ''
-        if(level === 1){ content += `<@&${config.roles.dev}>` }
-
-        await this.sendMes(config.channels.logs, { content: content, embeds: [embed2], files: title.files })
 
     }
     

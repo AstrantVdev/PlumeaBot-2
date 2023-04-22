@@ -3,6 +3,15 @@
  *
  * @class Cmd
  */
+import {
+    ApplicationCommand,
+    ButtonBuilder,
+    ButtonComponent,
+    ButtonInteraction,
+    CommandInteraction,
+    Interaction, ModalBuilder
+} from "discord.js";
+import {STRING} from "sequelize";
 
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js')
 const {config} = require("./config");
@@ -23,60 +32,59 @@ class Inter {
         throw new Error("Method 'speError()' must be implemented.")
     }
 
-    interError(inter, error=null, lvl=0, convert=true) : void {
-        const { colors } = require('./utils/message.js')
+    interError(inter, error=null, lvl=0, customMes={ content: null, embeds: null, components: null }) : void {
         const mUtil = require("./utils/message.js")
-
-        let mes = require("./errors.json").cmds.default
-        if(error) mes = require("./errors.json").cmds.default[error]
+        const { colors } = require('./utils/message.js')
+        const thisClass = this
 
         let color = colors.yellow
-
-        switch (lvl){
+        switch (lvl) {
             case 1:
                 color = colors.red
-                mes += "\nContacte <@548551538487066629>"
                 break
         }
 
-        const embed = mUtil.newEmbed()
-            .setTitle("Error ;-;")
-            .setDescription(`${mes}`)
+        sendUserError()
+        sendLogError()
 
-        let reply = { embeds: [embed], ephemeral: true }
+        function sendUserError(){
+            let embeds = customMes.embeds
 
+            if(embeds) {
+                let mes = require("./errors.json").cmds.default
+                if (error) mes = require("./errors.json").cmds.default[error]
 
-    }
+                switch (lvl) {
+                    case 1:
+                        color = colors.red
+                        mes += `\nContacte le <@&${config.roles.dev}>`
+                        break
+                }
 
-    async Error(inter, error, level = 0, defer = false, link = null){
+                embeds.push(mUtil.newEmbed()
+                    .setTitle("Error ;-;")
+                    .setDescription(`${mes}`)
+                )
+            }
 
-        const embed = this.newEmbed()
-            .setTitle("Error ;-;")
-            .setDescription(`${errorMes}`)
+            let reply = { content: customMes.content, embeds: embeds, components: customMes.components, ephemeral: true }
+            inter.editReply(reply)
 
-        if(link){
-            embed.setImage(link)
         }
 
-        let reply = { embeds: [embed], ephemeral: true }
-        if(error.components){ reply.components = error.components }
+        function sendLogError(){
+            const title = thisClass.chooseInterMessageTitle(inter)
 
-        if(defer) {
-            await inter.editReply(reply)
-        }else{
-            await inter.reply(reply)
-        }
-
-        const title = this.chooseInterMessageTitle(inter)
-        const embed2 = this.newEmbed(color)
-            .setTitle(title.content)
-            .setDescription(`**Error** | ${inter.member.user} | <#${inter.channel.id}>
+            const embed = mUtil.newEmbed(color)
+                .setTitle(title.content)
+                .setDescription(`**Error** | ${inter.member.user} | <#${inter.channel.id}>
                             \`\`\`${error}\`\`\``)
 
-        let content = ''
-        if(level === 1){ content += `<@&${config.roles.dev}>` }
+            let content = null
+            if(lvl == 1){ content += `<@&${config.roles.dev}>` }
 
-        await this.sendMes(config.channels.logs, { content: content, embeds: [embed2], files: title.files })
+            mUtil.sendMes(config.channels.logs, { content: content, embeds: [embed], files: title.files })
+        }
 
     }
 
@@ -126,16 +134,73 @@ class Inter {
 
     }
 
-    success(inter) {
-        console.log("eating")
+    getSuccessMes(key, args){
+        let mes = require("./newConfig.js").c.success.cmds[key]
+
+        for (const arg in args){
+            mes = mes.replace("#uwu", arg)
+
+        }
+        return mes
+
+    }
+
+    success(inter, convert=true, customReply=null, args = []) : void {
+        const mUtil = require("./utils/message.js")
+        const { colors } = require('./utils/message.js')
+
+        switch(typeof customReply) {
+            // @ts-ignore
+            case ModalBuilder:
+                inter.showModal(customReply)
+                break
+
+            case "string":
+                inter.editReply({
+                    embeds: [
+                        mUtil.newEmbed(colors.green)
+                            .setDescription(this.getSuccessMes(customReply, args))
+                    ],
+                    ephemeral: true
+                })
+                break
+
+            case undefined: //none
+                inter.editReply({
+                    embeds: [
+                        mUtil.newEmbed(colors.green)
+                            .setDescription(`**Action accomplie avec succès ! :D**`)
+                    ],
+                    ephemeral: true
+                })
+                break
+
+            default:
+                if (!customReply.formatted) {
+                    customReply.embeds = [ mUtil.newEmbed(colors.green).setDescription(customReply.content) ]
+                    customReply.content = null
+                }
+                if (customReply.ephemeral == undefined) customReply.ephemeral = true
+
+                inter.editReply(customReply)
+
+        }
+
+        const title = this.chooseInterMessageTitle(inter)
+        const embed = mUtil.newEmbed(colors.green)
+            .setTitle(title.content)
+            .setDescription(`**Success** | ${inter.member.user} | <#${inter.channel.id}>`)
+
+        mUtil.sendMes(config.channels.logs, {embeds: [embed], files: title.files})
+
     }
 
 }
 
-class Cmd {
-    errorMes = ''
+class Cmd extends Inter{
 
     constructor() {
+        super()
         if (this.constructor === Cmd) {
             throw new Error("Abstract classes can't be instantiated.")
         }
@@ -148,70 +213,5 @@ class Cmd {
     exe() {
         throw new Error("Method 'exe()' must be implemented.")
     }
-
-    error(error=null, lvl=0, convert=true) {
-        const { colors } = require('./utils/message.js')
-        const mUtil = require("./utils/message.js")
-
-        let mes = require("./errors.json").cmds.default
-        if(error) mes = require("./errors.json").cmds.default[error]
-
-        let color = colors.yellow
-
-        switch (lvl){
-            case 1:
-                color = this.color.red
-                mes += "\nContacte <@548551538487066629>"
-                break
-        }
-
-        const embed = mUtil.newEmbed()
-            .setTitle("Error ;-;")
-            .setDescription(`${mes}`)
-
-
-
-    }
-
-    async interError(inter, error, level = 0, defer = false, link = null){
-
-        let reply = { embeds: [embed], ephemeral: true }
-        if(error.components){ reply.components = error.components }
-
-        if(defer) {
-            await inter.editReply(reply)
-        }else{
-            await inter.reply(reply)
-        }
-
-        const title = this.chooseInterMessageTitle(inter)
-        const embed2 = this.newEmbed(color)
-            .setTitle(title.content)
-            .setDescription(`**Error** | ${inter.member.user} | <#${inter.channel.id}>
-                            \`\`\`${error}\`\`\``)
-
-        let content = ''
-        if(level === 1){ content += `<@&${config.roles.dev}>` }
-
-        await this.sendMes(config.channels.logs, { content: content, embeds: [embed2], files: title.files })
-
-    }
-
-    success() {
-        console.log("eating")
-    }
     
-}
-
-
-/**
- * Dog.
- *
- * @class Dog
- * @extends {Cmd}
- */
-class Dog extends Cmd {
-    exe() {
-
-    }
 }
