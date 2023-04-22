@@ -21,7 +21,7 @@ module.exports = {
         await inter.message.edit({ components: [] })
 
         const ticket = await client.channels.fetch(config.channels.ticket)
-        const embed = mes.newEmbed(mes.color.yellow)
+        const embed = mes.newEmbed(mes.colors.yellow)
             .setDescription(`Désolé mais ton commentaire a été invalidé... Si aucune explication n'est fournie ci-dessous, crée un ${ticket}`)
 
         await mes.interSuccess(inter, { content: `<@${senderId}>`, embeds: [embed], ephemeral: false, formatted: true })

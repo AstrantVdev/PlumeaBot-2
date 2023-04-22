@@ -1,0 +1,9 @@
+{
+  "errors": {
+    "cmds":{
+      "default": "Une erreur est survenue, vous pouvez contacter <@548551538487066629> pour vous aider",
+      "test": "lol"
+
+    }
+  }
+}

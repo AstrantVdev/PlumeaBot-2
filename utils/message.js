@@ -3,7 +3,7 @@ const {ActionRowBuilder, ButtonBuilder} = require("discord.js");
 
 module.exports = {
 
-    color: {
+    colors: {
         blue: "00112B",
         red: "D52B1E",
         yellow: "FFB612",
@@ -179,52 +179,6 @@ module.exports = {
 
     },
 
-    chooseInterMessageTitle(inter){
-        let title = { files: [] }
-        let options = []
-
-        if(inter.isChatInputCommand()){
-            title.content = '/ ' + inter.commandName
-            const cmdOptions = inter.options._hoistedOptions
-
-            if(cmdOptions){
-                cmdOptions.forEach(o => {
-                    options.push(o.value)
-
-                    if(o.type === 11){
-                        title.files.push(o.attachment)
-                    }
-
-                })
-
-            }
-
-        }else if(inter.isButton()){
-            const split = inter.customId.split('/')
-            title.content = 'o ' + split[0]
-            options = split.slice(1, split.length)
-
-        }else if(inter.isModalSubmit()){
-            const split = inter.customId.split('/')
-            title.content = '% ' + split[0]
-            options = split.slice(1, -1)
-
-        }else if(inter.isStringSelectMenu() || inter.isChannelSelectMenu() || inter.isMentionableSelectMenu() || inter.isRoleSelectMenu() || inter.isUserSelectMenu()){
-            const split = inter.customId.split('/')
-            title.content = '^ ' + split[0]
-            options = split.slice(1, -1)
-
-        }
-
-        for(let o in options){
-            title.content += "\n`" + options[o] + "`"
-
-        }
-
-        return title
-
-    },
-
     async interSuccess(inter, reply = null, defer = false){
 
         if(reply){
@@ -308,9 +262,9 @@ module.exports = {
 
         }
 
-        let color = this.color.yellow
+        let color = this.colors.yellow
         if (level === 1){
-            color = this.color.red
+            color = this.colors.red
             errorMes += "\nContacte <@548551538487066629>"
         }
 
@@ -342,6 +296,6 @@ module.exports = {
 
         await this.sendMes(config.channels.logs, { content: content, embeds: [embed2], files: title.files })
 
-    },
+    }
     
 }

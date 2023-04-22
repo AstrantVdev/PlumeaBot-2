@@ -30,7 +30,7 @@ module.exports = {
 		const json = config.plumesRoles
 		const roles = new Map(Object.entries(json))
 
-		let color = mes.color.blue
+		let color = mes.colors.blue
 		await roles.forEach(async (args, roleid)=>{
 
 			if(await member.roles.cache.find(r => r.id === roleid)){
