@@ -4,87 +4,131 @@
  * @class Cmd
  */
 import {
-    ApplicationCommand,
-    ButtonBuilder,
-    ButtonComponent,
     ButtonInteraction,
     CommandInteraction,
-    Interaction, ModalBuilder
+    ModalBuilder, ModalSubmitInteraction, SelectMenuInteraction
 } from "discord.js";
-import {STRING} from "sequelize";
 
-const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js')
-const {config} = require("./config");
+const { c } = require("./newConfig.js");
 
+class error{
+    public errorId: any
+    public lvl: any
+    public customMes: any
+
+    constructor(errorId=null, lvl=0, customMes={ content: null, embeds: null, components: null }) {
+        this.errorId = errorId
+        this.lvl = lvl
+        this.customMes = customMes
+    }
+
+}
 class Inter {
+    public channelIds: Array<String>
+    public categoryIds: Array<String>
+    public roleIds: Array<String>
+    public userIds: Array<String>
 
     constructor() {
         if (this.constructor === Cmd) {
             throw new Error("Abstract classes can't be instantiated.")
         }
+
     }
 
-    exe(inter) : void {
+    async interExe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction) : Promise<void> {
+        await inter.deferReply()
+
+        let errors : Array<error> = []
+
+        if(this.channelIds.includes(inter.channelId)) errors.push(c.errors.cmds.channel)
+        if(this.categoryIds.includes(inter.channel.parentId)) errors.push(c.errors.cmds.category)
+        if(this.userIds.includes(inter.user.id)) errors.push(c.errors.cmds.channel)
+
+        let hasRole = false
+        this.roleIds.some(r => {
+            // @ts-ignore
+            if(inter.member.roles.some(role => role.id == r)){
+                hasRole = true
+                return false //break
+            }
+        })
+        if(!hasRole) errors.push(c.errors.cmds.role)
+
+
+        this.exe(inter, errors)
+
+        if(! errors){
+            this.success(inter)
+        }else{
+            this.sendErrors(inter, errors)
+        }
+
+    }
+
+    exe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction, errors : Array<error>) : void {
         throw new Error("Method 'exe()' must be implemented.")
     }
 
-    speError(inter, error=null, lvl=0, convert=true) : void {
-        throw new Error("Method 'speError()' must be implemented.")
-    }
-
-    interError(inter, error=null, lvl=0, customMes={ content: null, embeds: null, components: null }) : void {
+    sendErrors(inter, errors : Array<error>) : void {
         const mUtil = require("./utils/message.js")
         const { colors } = require('./utils/message.js')
-        const thisClass = this
+
+        let lvl = 0
+        let userMes = {
+            content: null,
+            embeds: [mUtil.newEmbed()
+                .setTitle("Erreur ;-;")],
+            components: null
+        }
+
+        //boucle toutes les erreurs rencontrées
+        errors.forEach( er => {
+            if (er.lvl > lvl) lvl = er.lvl
+
+            userMes.content += er.customMes.content
+
+            er.customMes.components.forEach(c => {
+                if(! userMes.components.includes(c)) userMes.components.push(c)
+            })
+
+            er.customMes.embeds.forEach(e => {
+                if(! userMes.embeds.includes(e)) userMes.embeds.push(e)
+            })
+
+            if (er.errorId != null) userMes.embeds[0].description += `\n - ${c.errors.cmds[er.errorId]}`
+
+        })
 
         let color = colors.yellow
         switch (lvl) {
             case 1:
                 color = colors.red
+                userMes.content += `\nContacte le <@&${c.roles.dev}>`
                 break
         }
 
-        sendUserError()
-        sendLogError()
+        //reply to user
+        if(userMes.embeds[0].description == null) userMes.embeds[0].description = c.errors.cmds.default
+        inter.editReply(userMes)
 
-        function sendUserError(){
-            let embeds = customMes.embeds
+        //send log
+        const title = this.chooseInterMessageTitle(inter)
 
-            if(embeds) {
-                let mes = require("./errors.json").cmds.default
-                if (error) mes = require("./errors.json").cmds.default[error]
-
-                switch (lvl) {
-                    case 1:
-                        color = colors.red
-                        mes += `\nContacte le <@&${config.roles.dev}>`
-                        break
-                }
-
-                embeds.push(mUtil.newEmbed()
-                    .setTitle("Error ;-;")
-                    .setDescription(`${mes}`)
-                )
-            }
-
-            let reply = { content: customMes.content, embeds: embeds, components: customMes.components, ephemeral: true }
-            inter.editReply(reply)
-
+        let logMes = {
+            content: null,
+            embeds: [
+                mUtil.newEmbed(color)
+                    .setTitle(title.content)
+                    .setDescription(`**Error** | ${inter.member.user} | <#${inter.channel.id}>
+                            \`\`\`${userMes.embeds[0].description}\`\`\``)
+            ],
+            files: title.files
         }
 
-        function sendLogError(){
-            const title = thisClass.chooseInterMessageTitle(inter)
+        if(lvl == 1) logMes.content = `<@&${c.roles.dev}>`
 
-            const embed = mUtil.newEmbed(color)
-                .setTitle(title.content)
-                .setDescription(`**Error** | ${inter.member.user} | <#${inter.channel.id}>
-                            \`\`\`${error}\`\`\``)
-
-            let content = null
-            if(lvl == 1){ content += `<@&${config.roles.dev}>` }
-
-            mUtil.sendMes(config.channels.logs, { content: content, embeds: [embed], files: title.files })
-        }
+        mUtil.sendMes(c.channels.logs, logMes)
 
     }
 
@@ -110,17 +154,17 @@ class Inter {
 
         }else if(inter.isButton()){
             const split = inter.customId.split('/')
-            title.content = 'o ' + split[0]
+            title.content = '🔘 ' + split[0]
             options = split.slice(1, split.length)
 
         }else if(inter.isModalSubmit()){
             const split = inter.customId.split('/')
-            title.content = '% ' + split[0]
+            title.content = '📑 ' + split[0]
             options = split.slice(1, -1)
 
         }else if(inter.isStringSelectMenu() || inter.isChannelSelectMenu() || inter.isMentionableSelectMenu() || inter.isRoleSelectMenu() || inter.isUserSelectMenu()){
             const split = inter.customId.split('/')
-            title.content = '^ ' + split[0]
+            title.content = '📄 ' + split[0]
             options = split.slice(1, -1)
 
         }
@@ -145,7 +189,7 @@ class Inter {
 
     }
 
-    success(inter, convert=true, customReply=null, args = []) : void {
+    interSuccess(inter, customReply=null, args = []) : void {
         const mUtil = require("./utils/message.js")
         const { colors } = require('./utils/message.js')
 
@@ -191,8 +235,12 @@ class Inter {
             .setTitle(title.content)
             .setDescription(`**Success** | ${inter.member.user} | <#${inter.channel.id}>`)
 
-        mUtil.sendMes(config.channels.logs, {embeds: [embed], files: title.files})
+        mUtil.sendMes(c.channels.logs, {embeds: [embed], files: title.files})
 
+    }
+
+    success(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction){
+        throw new Error("Method 'success()' must be implemented.")
     }
 
 }
@@ -204,6 +252,7 @@ class Cmd extends Inter{
         if (this.constructor === Cmd) {
             throw new Error("Abstract classes can't be instantiated.")
         }
+
     }
 
     data() {
