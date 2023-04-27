@@ -5,12 +5,32 @@ import {Sequelize} from "sequelize";
 export let sequelize
 
 export class DbObject{
-    public sequelize : Sequelize
+    public tab
+    public id : string
 
-    constructor() {
+    constructor(id=null) {
         if (this.constructor === Cmd) {
             throw new Error("Abstract classes can't be instantiated.")
         }
+        this.tab.sync()
+        this.id = id
+
+    }
+
+    async getMember(){
+        await this.tabGet()
+    }
+
+    async addOne(){
+        throw new Error("Method 'addOne()' must be implemented.")
+    }
+
+    async removeOne(){
+        await this.tabDestroy()
+    }
+
+    async exists(){
+        return this.tabExist()
     }
 
     /*
@@ -29,16 +49,16 @@ export class DbObject{
     },
     */
 
-    async tabCreate(tab, what){
-        await tab.create(what)
+    async tabCreate(what){
+        await this.tab.create(what)
     }
 
-    async tabDestroy(tab, id){
-        await tab.destroy({ where: { id: id } })
+    async tabDestroy(){
+        await this.tab.destroy({ where: { id: this.id } })
     }
 
-    tabExist(tab, id){
-        return tab.count({ where: { id: id } })
+    tabExist(){
+        return this.tab.count({ where: { id: this.id } })
             .then(count => {
                 return count !== 0
 
@@ -46,30 +66,30 @@ export class DbObject{
 
     }
 
-    async tabGet(tab, id){
-        return await tab.findOne({ where: { id: id } })
+    async tabGet(){
+        return await this.tab.findOne({ where: { id: this.id } })
     }
 
-    async tabGetAtr(tab, id, atr){
+    async tabGetAtr(atr){
         const args = {
             attributes: [atr],
             raw: true
         }
-        if(id){ args["where"] = { id: id } }
-        const a = await tab.findOne(args)
+        if(this.id){ args["where"] = { id: this.id } }
+        const a = await this.tab.findOne(args)
 
         return a[atr]
 
     }
 
-    async tabGetMultipleAtr(tab, id, atr){
+    async tabGetMultipleAtr(atr){
         const args = {
             attributes: atr,
             raw: true
         }
-        if(id) args["where"] = { id: id }
+        if(this.id) args["where"] = { id: this.id }
 
-        const occurrences = await tab.findAll(args)
+        const occurrences = await this.tab.findAll(args)
 
         const multipleAtr = []
         occurrences.forEach(o => {
@@ -85,31 +105,31 @@ export class DbObject{
 
     }
 
-    async tabSetAtr(tab, id, atr, val){
-        await tab.update({ [atr]: val}, { where: { id: id } })
+    async tabSetAtr(atr, val){
+        await this.tab.update({ [atr]: val}, { where: { id: this.id } })
     }
 
-    async tabSetAtrToAll(tab, atr, val){
-        await tab.update({ [atr]: val}, { 'where': { } } )
+    async tabSetAtrToAll(atr, val){
+        await this.tab.update({ [atr]: val}, { 'where': { } } )
     }
 
-    async tabAddAtr(tab, id, atr, val){
+    async tabAddAtr(atr, val){
         const append = {[atr]: sequelize.fn('array_append', sequelize.col(atr), val)}
-        await tab.update( append, { 'where': { id: id } })
+        await this.tab.update( append, { 'where': { id: this.id } })
     }
 
-    async tabRemoveAtr(tab, id, atr, val){
-        await tab.update({ [atr]: sequelize.fn('array_remove', sequelize.col(atr), val) }, { 'where': { id: id } })
+    async tabRemoveAtr(atr, val){
+        await this.tab.update({ [atr]: sequelize.fn('array_remove', sequelize.col(atr), val) }, { 'where': { id: this.id } })
     }
 
-    async tabRemoveAtrIndex(tab, id, atr, index){
-        const list = this.tabGetAtr(tab, id, atr)
+    async tabRemoveAtrIndex(atr, index){
+        const list = this.tabGetAtr(atr)
         const o = list[index]
-        await this.tabRemoveAtr(tab, id, atr, o)
+        await this.tabRemoveAtr(atr, o)
     }
 
-    async tabIncrementAtr(tab, id, atr, i){
-        await tab.increment(atr, { by: i, where: { id: id }})
+    async tabIncrementAtr(atr, i){
+        await this.tab.increment(atr, { by: i, where: { id: this.id }})
     }
 
 }
@@ -154,7 +174,7 @@ export function sync(){
 
     for(const file of files){
         const object : DbObject = new (require(file)[file.split("/")[-1].slice(0, -3)])()
-        object.sequelize.sync()
+        object.tab.sync()
 
     }
 

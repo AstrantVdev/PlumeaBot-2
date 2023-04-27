@@ -15,9 +15,6 @@ export class Menu extends Inter{
     public get() : ModalBuilder | ActionRowBuilder{
         throw new Error("Method 'get()' must be implemented.")
 
-        const xD = new Inter()
-        let test = new (require("./cmd")["Inter"])()
-
         const modal = new ModalBuilder()
             .setCustomId(this.id)
             .setTitle('Crée le Sprint ! :D')

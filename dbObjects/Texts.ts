@@ -1,9 +1,14 @@
-import {DbObject} from "../dbManager";
-import {sequelize} from "../index";
+
+import {DbObject, sequelize} from "../dbManager";
 import {DataTypes} from "sequelize";
 
 export class Text extends DbObject{
-    sequelize = sequelize.define('texts', {
+
+    constructor(id=null) {
+        super(id)
+    }
+
+    tab = sequelize.define('texts', {
         id: {
             type: DataTypes.UUID,
             primaryKey: true,
@@ -71,9 +76,5 @@ export class Text extends DbObject{
         }
 
     })
-
-    constructor() {
-        super()
-    }
 
 }

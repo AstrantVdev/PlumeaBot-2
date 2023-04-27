@@ -1,9 +1,8 @@
-import {DbObject} from "../dbManager";
-import {sequelize} from "../index";
+import {DbObject, sequelize} from "../dbManager";
 import {DataTypes} from "sequelize";
 
 export class ParametersIds extends DbObject{
-    sequelize = sequelize.define('parametersIds', {
+    tab = sequelize.define('parametersIds', {
         id: {
             type: DataTypes.STRING,
             primaryKey: true,

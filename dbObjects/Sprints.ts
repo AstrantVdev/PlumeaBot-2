@@ -1,9 +1,13 @@
-import {DbObject} from "../dbManager";
-import {sequelize} from "../index";
+import {DbObject, sequelize} from "../dbManager";
 import {DataTypes} from "sequelize";
 
 export class Sprint extends DbObject{
-    sequelize = sequelize.define('sprints', {
+
+    constructor(id=null) {
+        super(id)
+    }
+
+    tab = sequelize.define('sprints', {
         id: {
             type: DataTypes.UUID,
             primaryKey: true,
@@ -24,7 +28,4 @@ export class Sprint extends DbObject{
 
     })
 
-    constructor() {
-        super()
-    }
 }

@@ -1,9 +1,13 @@
-import {DbObject} from "../dbManager";
-import {sequelize} from "../index";
+import {DbObject, sequelize} from "../dbManager";
 import {DataTypes} from "sequelize";
 
 export class textRequest extends DbObject{
-    sequelize = sequelize.define('textRequest', {
+
+    constructor(id=null) {
+        super(id)
+    }
+
+    tab = sequelize.define('textRequest', {
         mesId: {
             type: DataTypes.BIGINT,
             defaultValue: 0,
@@ -20,7 +24,4 @@ export class textRequest extends DbObject{
 
     })
 
-    constructor() {
-        super();
-    }
 }
