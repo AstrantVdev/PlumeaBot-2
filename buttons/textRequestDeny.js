@@ -14,7 +14,7 @@ module.exports = {
         if(inter.member.id === textAuthor){
             await inter.message.edit({ components: [], content: `<@${textAuthor}> | REJETE ❌` })
 
-            const sent = await mes.private(await inter.guild.members.fetch(senderId), await rUtils.getDenyMes(textUUID, senderId))
+            const sent = await mes.privateMes(await inter.guild.members.fetch(senderId), await rUtils.getDenyMes(textUUID, senderId))
             if(sent){
                 await rUtils.setOut(senderId, textUUID)
 

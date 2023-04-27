@@ -33,12 +33,12 @@ module.exports = {
 
                 case c.channels.central:
                     message.delete()
-                    await mes.private(author, 'Utilise la commande `/post` pour partager ton texte ;3')
+                    await mes.privateMes(author, 'Utilise la commande `/post` pour partager ton texte ;3')
                     return
 
                 case c.channels.sesame:
                     message.delete()
-                    await mes.private(author, 'Tape la commande `/sesame` `code` pour accéder au serveur')
+                    await mes.privateMes(author, 'Tape la commande `/sesame` `code` pour accéder au serveur')
                     return
 
                 case c.channels.general:
@@ -79,7 +79,7 @@ module.exports = {
 
                     if(! await mUtils.hasTutoId(id, 1)){
                         const reply = "Fait la commande /commentaire dans salon associé au texte pour que le staff valide ton commentaire :)"
-                        const sent = await mes.private(author, reply)
+                        const sent = await mes.privateMes(author, reply)
                         if(! sent){
                             await message.reply(reply)
                         }

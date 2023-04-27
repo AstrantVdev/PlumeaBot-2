@@ -131,7 +131,7 @@ module.exports = {
                         const privEmbed = mes.newEmbed(color)
                             .setTitle("Félicitations ! Vous voici `" + lower.name + "`.")
                             .setDescription(config.plumesRoles[lower.id].mes)
-                        const sent = await mes.private(member, { embeds: [privEmbed] })
+                        const sent = await mes.privateMes(member, { embeds: [privEmbed] })
 
                         const channel = config.channels.plumes
                         const embed = mes.newEmbed(color)

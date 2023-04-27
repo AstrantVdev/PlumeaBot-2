@@ -1,5 +1,4 @@
-module.exports = {
-    c:
+export const c =
     {
         errors:{
             cmds:{
@@ -173,5 +172,3 @@ module.exports = {
         ]
 
     }
-
-}

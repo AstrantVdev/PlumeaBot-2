@@ -223,7 +223,7 @@ module.exports = {
         if(goOut){
             goOut.forEach(async r => {
                 this.delMes(r.senderId, r.textId)
-                const sent = await mes.private(await client.users.fetch(r.senderId), await this.getTimeoutMes(r.textId))
+                const sent = await mes.privateMes(await client.users.fetch(r.senderId), await this.getTimeoutMes(r.textId))
 
                 if(! sent){
                     const message = await this.sendAccept(r.senderId, r.textId)

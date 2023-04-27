@@ -72,7 +72,7 @@ module.exports = {
 
                     "https://imgur.com/92562no"
 
-                const sent = await mes.private(inter.member, socials)
+                const sent = await mes.privateMes(inter.member, socials)
 
                 if(sent){
                     await mes.interSuccess(inter, re+'Bienvenue ! :D')

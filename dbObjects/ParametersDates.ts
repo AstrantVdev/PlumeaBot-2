@@ -1,8 +1,13 @@
 import {DataTypes} from "sequelize";
-import {DbObject, sequelize} from "../dbManager";
+import {tab, db} from "../dbManager";
 
-export class ParametersDates extends DbObject{
-    tab = sequelize.define('parametersDates', {
+export class ParametersDates extends tab{
+
+    constructor(id=null) {
+        super(id)
+    }
+
+    tab = db.define('parametersDates', {
         id: {
             type: DataTypes.STRING,
             primaryKey: true,
@@ -10,9 +15,5 @@ export class ParametersDates extends DbObject{
         },
         date: DataTypes.DATE
     })
-
-    constructor() {
-        super();
-    }
 
 }

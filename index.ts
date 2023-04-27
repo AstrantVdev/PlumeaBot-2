@@ -8,7 +8,7 @@ const path = require('path')
 const fs = require('fs')
 export const DIRNAME = __dirname
 
-let client = new Client({
+export let client = new Client({
     intents: [
         GatewayIntentBits.DirectMessageReactions,
         GatewayIntentBits.DirectMessageTyping,
