@@ -1,10 +1,10 @@
-import {tab, db} from "../dbManager"
+import {Tab, db} from "../dbManager"
 import {DataTypes} from "sequelize"
 import {parameter, ParametersIds} from "./ParametersIds"
 import {client} from "../index"
 import {newEmbed, sendMes} from "../utils/message"
 import{c} from "../config"
-export  class Opinions extends tab{
+export  class Opinions extends Tab{
 
     constructor(id=null) {
         super(id)
@@ -26,7 +26,7 @@ export  class Opinions extends tab{
             defaultValue: 0
         },
         senderId: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.STRING,
             defaultValue: 0,
         },
         validate: {
@@ -35,20 +35,6 @@ export  class Opinions extends tab{
         }
 
     })
-
-    async addOne(id, words, textUUID, senderId, messageId){
-        const date = new Date()
-
-        await db.tabCreate({
-            id: id,
-            words: words,
-            textId: textUUID,
-            senderId: senderId,
-            date: date,
-            messageId: messageId
-        })
-
-    }
 
     async confirm(member, p, textUUID, who, inter){
         await member.addPlumes(p)

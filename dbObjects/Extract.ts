@@ -1,40 +1,31 @@
 
-import {tab, db} from "../dbManager"
+import {Tab, db} from "../dbManager"
 import {DataTypes, Op} from "sequelize"
 import {c} from "../config"
 import {client} from "../index";
 import {Member} from "./Member";
 
-export class Text extends tab{
+export class Extract extends Tab{
 
     constructor(id=null) {
         super(id)
     }
 
-    tab = db.define('texts', {
+    tab = db.define('extracts', {
         id: {
             type: DataTypes.UUID,
             primaryKey: true,
             unique: true,
         },
-        id_text_title: {
-            type: DataTypes.STRING,
-            defaultValue: ''
-        },
-        id_text: {
-            type: DataTypes.STRING,
-            defaultValue: ''
-        },
-        title: {
-            type: DataTypes.STRING,
-            defaultValue: ''
+        textId: {
+            type: DataTypes.UUID
         },
         desc: {
             type: DataTypes.TEXT,
             defaultValue: ''
         },
         authorId: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.STRING,
             defaultValue: 0
         },
         chap1: {
@@ -47,10 +38,6 @@ export class Text extends tab{
         },
         words: {
             type: DataTypes.INTEGER,
-            defaultValue: 0
-        },
-        textMesId: {
-            type: DataTypes.BIGINT,
             defaultValue: 0
         },
         fileMesId: {
@@ -80,21 +67,12 @@ export class Text extends tab{
 
     })
 
-    async addText(text){
-        await this.create(text)
-    }
-
-    async id_textExist(id_text, authorId, uuid){
-
-        return this.tab.count({ where: { id_text: id_text, authorId: authorId, id: { [Op.not]: uuid } } })
-            .then(count => {
-                return count !== 0
-
-            })
+    async add(extract) {
+        await this.create(extract)
     }
 
     async vanish(){
-        await this.removeTextMes()
+        await this.removeExtractMes()
         await this.removeFileMes()
 
         const postId = await this.getPostId()
@@ -104,29 +82,29 @@ export class Text extends tab{
 
         let channel = await client.channels.fetch(postId)
         setTimeout(() => {
-            channel.setLocked(true, "Text deleted")
+            channel.setLocked(true, "Extract deleted")
         }, 4000)
 
         const authorId = await this.getAtr('authorId')
-        await new Member(authorId).removeTextUUID(this.id)
+        await new Member(authorId).removeExtractId(this.id)
 
         await this.destroy()
     }
 
-    async getId_Text(){
-        return this.getAtr('id_text')
+    async getId_extract(){
+        return this.getAtr('id_extract')
     }
 
-    async setId_Text(id_text){
-        await this.setAtr('id_text', id_text)
+    async setId_extract(id_extract){
+        await this.setAtr('id_extract', id_extract)
     }
 
     async getIdTitle(id){
-        return this.getAtr('id_text_title')
+        return this.getAtr('id_extract_title')
     }
 
-    async setIdTitle(id_textTitle){
-        await this.setAtr('id_text_title', id_textTitle)
+    async setIdTitle(id_extractTitle){
+        await this.setAtr('id_extract_title', id_extractTitle)
     }
 
     async getTitle(){
@@ -186,12 +164,12 @@ export class Text extends tab{
         return this.getAtr('protected')
     }
 
-    async getTextMesId(){
-        return this.getAtr('textMesId')
+    async getextractMesId(){
+        return this.getAtr('extractMesId')
     }
 
-    async setTextMesId(textMesId){
-        await this.setAtr('textMesId', textMesId)
+    async setextractMesId(extractMesId){
+        await this.setAtr('extractMesId', extractMesId)
     }
 
     async getFileMesId(){
@@ -246,8 +224,8 @@ export class Text extends tab{
         await this.setAtr('questions', questions)
     }
 
-    async removeTextMes(){
-        await mes.delMes(c.channels.text, await this.getTextMesId())
+    async removeExtractMes(){
+        await mes.delMes(c.channels.text, await this.getextractMesId())
     }
 
     async removeFileMes(){
@@ -261,7 +239,7 @@ export class Text extends tab{
         const author = await client.users.fetch(authorId)
 
         const embed = mes.newEmbed()
-            .setTitle("Voici le texte demandé !")
+            .setTitle("Voici le extracte demandé !")
             .setDescription(`Les bannissements et poursuites judiciaires sont éprouvants pour tout le monde... Alors ne diffuse pas cette oeuvre et prends en soin, ${author.username} compte sur toi :) \n\n || ${this.id} ||`)
 
         return await mes.privateMes(member, { embeds: [embed], files: [file] })
@@ -279,9 +257,9 @@ export class Text extends tab{
             .setDescription(desc)
     }
 
-    async getSimilarTextUUID(id_text_title, id, uuid){
+    async getSimilarextractUUID(id_extract_title, id, uuid){
         const serie = await this.tab.findAll({
-            where: {'id_text_title': id_text_title, 'authorId': id, 'id': { [Op.not]: uuid }},
+            where: {'id_extract_title': id_extract_title, 'authorId': id, 'id': { [Op.not]: uuid }},
             attributes: ['id', 'chap1', 'chap2'],
             raw: true
         })
@@ -289,18 +267,18 @@ export class Text extends tab{
         let max = 0
         if(serie.length !== 0){
 
-            let text = serie[0]
+            let extract = serie[0]
             for(let t of serie){
                 if(t.chap1 > max){
                     max = t.chap1
-                    text = t
+                    extract = t
                 }else if(t.chap2 > max) {
                     max = t.chap2
-                    text = t
+                    extract = t
                 }
 
             }
-            return text.id
+            return extract.id
 
         }else{
             return 0
@@ -309,7 +287,7 @@ export class Text extends tab{
 
     }
 
-    async getTextUUIthisyPostId(postId){
+    async getextractUUIthisyPostId(postId){
         const uuid = await this.tab.findOne({
             where: { postId: postId },
             attributes: ['id'],

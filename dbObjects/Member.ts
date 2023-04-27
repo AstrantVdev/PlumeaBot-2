@@ -1,10 +1,9 @@
-import {tab, db} from "../dbManager"
+import {Tab, db} from "../dbManager"
 import {DataTypes, Op} from "sequelize"
 import {delMes, newEmbed, sendMes} from "../utils/message"
 import {c} from "../config";
-import {Text} from "./Texts";
 
-export class Member extends tab{
+export class Member extends Tab{
     constructor(id=null) {
         super(id)
     }
@@ -20,7 +19,7 @@ export class Member extends tab{
             defaultValue: 'o'
         },
         joinDate: DataTypes.DATE,
-        textsUUIDs: {
+        extractIds: {
             type: DataTypes.ARRAY(DataTypes.UUID),
             defaultValue: []
         },
@@ -44,15 +43,11 @@ export class Member extends tab{
             type: DataTypes.INTEGER,
             defaultValue: 0
         },
-        fileInPostingMesId: {
-            type: DataTypes.BIGINT,
-            defaultValue: 0
-        },
-        textInPostingUUID: DataTypes.UUID,
         tutoIds: {
             type: DataTypes.ARRAY(DataTypes.INTEGER),
             defaultValue: []
-        }
+        },
+        extractOnPostingId: DataTypes.UUID
 
     })
 
@@ -163,7 +158,7 @@ export class Member extends tab{
 
     async addFileInPosting(user, file){
         const embed = newEmbed()
-            .setTitle("Texte en /post")
+            .setTitle("Extrait en /post")
             .setDescription(`par ${user}`)
 
         const fileInPostingMes = await sendMes(c.channels.safe, {embeds: [embed], files: [file]})
@@ -171,33 +166,16 @@ export class Member extends tab{
 
     }
 
-    async setTextInPostingUUID(textInPostingUUID){
-        await this.setAtr('textInPostingUUID', textInPostingUUID)
+    async addExtractId(id){
+        await this.addAtr('extractIds', id)
     }
 
-    async getTextInPostingUUID(){
-        return this.getAtr('textInPostingUUID')
+    async removeExtractId(id){
+        await this.removeAtr('extractIds', id)
     }
 
-    async getTextInPosting(){
-        const uuid = await this.getTextInPostingUUID()
-        return new Text(uuid).get()
-    }
-
-    async getTextsUUIDs(){
-        return await this.getAtr('textsUUIDs')
-    }
-
-    async addTextUUID(UUID){
-        await this.addAtr('textsUUIDs', UUID)
-    }
-
-    async removeTextUUID(UUID){
-        await this.removeAtr('textsUUIDs', UUID)
-    }
-
-    async removeAllTextsUUIDs(){
-        await this.setAtr("textsUUIDs", [])
+    async removeAllExtractIds(){
+        await this.setAtr("extractIds", [])
     }
 
     async getAllIdsPlumes(){

@@ -1,14 +1,14 @@
-import {tab, db} from "../dbManager";
+import {Tab, db} from "../dbManager";
 import {DataTypes} from "sequelize";
 
-export class Sprinters extends tab{
+export class Sprinters extends Tab{
 
     constructor(id=null) {
         super(id)
     }
 
     tab = db.define('sprinters', {
-        userId: DataTypes.BIGINT,
+        userId: DataTypes.STRING,
         sprint: DataTypes.UUID,
         join: DataTypes.DATE
 

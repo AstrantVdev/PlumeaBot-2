@@ -1,9 +1,9 @@
-import {tab, db} from "../dbManager";
+import {Tab, db} from "../dbManager";
 import {DataTypes} from "sequelize";
 import {c} from "../config";
 import {ActionRowBuilder} from "discord.js";
 
-export class Sprint extends tab{
+export class Sprint extends Tab{
 
     constructor(id=null) {
         super()
@@ -29,12 +29,6 @@ export class Sprint extends tab{
         state: DataTypes.STRING
 
     })
-
-    async addOne(id){
-        await db.tabCreate({
-            id: id
-        })
-    }
 
     async getEnd(){
         return db.tabGetAtr('end')

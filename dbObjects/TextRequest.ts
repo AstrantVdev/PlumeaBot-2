@@ -1,22 +1,18 @@
-import {tab, db} from "../dbManager"
+import {Tab, db} from "../dbManager"
 import {DataTypes, Op} from "sequelize"
 import {ActionRowBuilder} from "discord.js"
 import {c} from "../config"
-import {Text} from "./Texts";
+import {Extract} from "./Extract";
+import {delMes} from "../utils/message";
+import {client} from "../index";
 
-export class textRequest extends tab{
+export class TextRequest extends Tab{
 
     constructor(id=null) {
         super()
     }
 
     tab = db.define('textRequest', {
-        mesId: {
-            type: DataTypes.BIGINT,
-            defaultValue: 0,
-            primaryKey: true,
-            unique: true
-        },
         textId: DataTypes.UUID,
         senderId: DataTypes.BIGINT,
         date: DataTypes.DATE,
@@ -27,24 +23,13 @@ export class textRequest extends tab{
 
     })
 
-    async addOne(mesId, senderId, textId){
-
-        await db.tabCreate({
-            mesId: mesId,
-            textId: textId,
-            senderId: senderId,
-            date: new Date
-        })
-
-    }
-
     async sendMes(user, textId){
-        const text = new Text(textId)
+        const text = new Extract(textId)
         const authorId = await text.getAuthorId()
         const senderId = user.id
 
         const embed = mes.newEmbed()
-            .setTitle(await text.getId_Text())
+            .setTitle(await text.getId_extract())
             .setDescription(`<@${senderId}> | ${user.username} demande l'accès au texte`)
 
         const row = new ActionRowBuilder()
@@ -58,7 +43,7 @@ export class textRequest extends tab{
     }
 
     async sendAccept(senderId, textId){
-        const text = new Text(textId)
+        const text = new Extract(textId)
         const authorId = await text.getAuthorId()
 
         const embed = mes.newEmbed()
@@ -74,7 +59,7 @@ export class textRequest extends tab{
     }
 
     async getDenyMes(textId, senderId){
-        const text = new Text(textId)
+        const text = new Extract(textId)
         const authorId = await text.getAuthorId()
 
         const embed = mes.newEmbed()
@@ -89,17 +74,25 @@ export class textRequest extends tab{
         return await mes.sendMes(c.channels.textRequest, await this.getDenyMes(textId, senderId))
     }
 
-    async getMemberRequestDate(senderId, textId){
-        const date = await this.tab.findOne({ attributes:  ["date"], where: { senderId: senderId, textId: textId } raw: true })
+    async getMemberRequestDate(){
+        const date = this.getAtr("date")
         if(date){
-            return date.date
+            return date
         }
         return null
 
     }
 
-    async getTimeoutMes(textId){
-        const text = new Text(textId)
+    async setTextId(textId){
+        await this.setAtr("textId", textId)
+    }
+
+    async getTextId(){
+        return await this.getAtr("textId")
+    }
+
+    async getTimeoutMes(){
+        const text = new Extract(this.get)
         const authorId = await text.getAuthorId()
 
         const embed = mes.newEmbed()
@@ -110,147 +103,70 @@ export class textRequest extends tab{
 
     }
 
-    async sendTimeout(senderId, textId){
-        return await mes.sendMes(c.channels.textRequest, await this.getTimeoutMes(textId))
-
+    async sendTimeout(){
+        return await mes.sendMes(c.channels.textRequest, await this.getTimeoutMes())
     }
 
-    async removeMes(senderId, textId){
-        const mesId = await this.getMesId(senderId, textId)
-        await mes.delMes(c.channels.textRequest, mesId)
+    async setDate(date){
+        await this.setAtr("date", date)
     }
 
-    async setMesId(senderId, textId, mesId){
-        await TR_TAB.update({ mesId: mesId } { where: {senderId: senderId, textId: textId } })
+    async getDate(){
+        return await this.getAtr("date")
     }
 
-    async getMesId(senderId, textId){
-        const a = await TR_TAB.findOne({ where: { senderId: senderId, textId: textId } attributes: ["mesId"], raw: true })
-        return a.mesId
+    async setOut(){
+        await this.setAtr("state", "OUT")
     }
 
-    async setDate(senderId, textId, date){
-        await TR_TAB.update({ date: date } { where: {senderId: senderId, textId: textId } })
-    }
-
-    async getDate(senderId, textId){
-        const a = await TR_TAB.findOne({ where: { senderId: senderId, textId: textId } attributes: ["date"], raw: true })
-        return a.date
-    }
-
-    async setOut(senderId, textId){
-        await TR_TAB.update({ state: "OUT" } { where: {senderId: senderId, textId: textId } })
-
-    }
-
-    async isOut(senderId, textId){
-        const a = await TR_TAB.findOne({ where: { senderId: senderId, textId: textId } attributes: ["state"], raw: true })
-        return a.state === "OUT"
-
+    async isOut(){
+        return await this.getAtr("state") == "OUT"
     }
 
     async setAccepted(senderId, textId){
-        await TR_TAB.update({ state: "ACCEPTED" } { where: {senderId: senderId, textId: textId } })
-
+        await this.setAtr("state", "ACCEPTED")
     }
 
     async isAccepted(senderId, textId){
-        const a = await TR_TAB.findOne({ where: { senderId: senderId, textId: textId } attributes: ["state"], raw: true })
-        return a.state === "ACCEPTED"
-
-    }
-
-    async delMes(senderId, textId){
-        await mes.delMes(c.channels.textRequest, await this.getMesId(senderId, textId))
+        return await this.getAtr("state") == "ACCEPTED"
     }
 
     async setDenied(senderId, textId){
-        await TR_TAB.update({ state: "DENIED" } { where: {senderId: senderId, textId: textId } })
-
+        await this.setAtr("state", "DENIED")
     }
 
     async isDenied(senderId, textId){
-        const a = await TR_TAB.findOne({ where: { senderId: senderId, textId: textId } attributes: ["state"], raw: true })
-        return a.state === "DENIED"
-
+        return await this.getAtr("state") == "DENIED"
     }
 
     async textRequestsCleaning(){
-        let date = new Date().setDate(date.getDate() - 8)
+        let date = new Date()
+        date.setDate(date.getDate() - 4)
 
-        await TR_TAB
-            .destroy({
-                where: {
-                    state: "OUT",
-                    date: {
-                        [Op.lt]: date
-                    }
-                }
-            })
-
-        date.setDate(date.getDate() + 6)
-
-        const goOutMes = await TR_TAB
+        const goOut = await this.tab
             .findAll(
                 {
-                    attributes: ["senderId", "textId"],
+                    attributes: ["id", "senderId", "state"],
                     raw: true,
                     where: {
-                        state: {
-                            [Op.or]: ["ACCEPTED", "DENIED"]
-                        }
                         date: {
                             [Op.lt]: date
                         }
                     }
                 })
 
-        if(goOutMes){
-            goRemoved.forEach(async r => {
-                await this.delMes(r.senderId, r.textId)
-            })
-        }
+        for (const r of goOut) {
 
-        const goOut = await TR_TAB
-            .findAll(
-                {
-                    attributes: ["senderId", "textId"],
-                    raw: true,
-                    where: {
-                        state: {
-                            [Op.or]: ["WAIT"]
-                        }
-                        date: {
-                            [Op.lt]: date
-                        }
-                    }
-                })
+            if(r.state == "WAIT"){
+                const sent = await mes.privateMes(await client.users.fetch(r.senderId), await this.getTimeoutMes())
 
-        if(goOut){
-            goOut.forEach(async r => {
-                this.delMes(r.senderId, r.textId)
-                const sent = await mes.privateMes(await client.users.fetch(r.senderId), await this.getTimeoutMes(r.textId))
-
-                if(! sent){
-                    const message = await this.sendAccept(r.senderId, r.textId)
-                    await this.setMesId(r.senderId, r.textId, message.id)
+                if(!sent){
+                    await this.sendTimeout()
                 }
-            })
-        }
+            }
 
-        await TR_TAB
-            .update(
-                { state: "OUT" }
-                {
-                    where: {
-                        state: {
-                            [Op.or]: ["ACCEPTED", "DENIED", "WAIT"]
-                        }
-                        date: {
-                            [Op.lt]: date
-                        }
-                    }
-                })
+            await new TextRequest(r.id).removeOne()
+        }
 
     }
 

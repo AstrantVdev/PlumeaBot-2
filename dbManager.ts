@@ -3,7 +3,7 @@ import {getAllFilesInDir} from "./util";
 import {Sequelize} from "sequelize";
 export let db
 
-export class tab {
+export class Tab {
     public tab
     public id : string
     public defaultParameter : string
@@ -15,6 +15,10 @@ export class tab {
         this.tab.sync()
         this.id = id
 
+    }
+
+    async addOne(tab){
+        await db.tabCreate(tab)
     }
 
     async getMember(){
@@ -168,7 +172,7 @@ export function sync(){
     const files = getAllFilesInDir("dbObjects")
 
     for(const file of files){
-        const object : tab = new (require(file)[file.split("/")[-1].slice(0, -3)])()
+        const object : Tab = new (require(file)[file.split("/")[-1].slice(0, -3)])()
         object.tab.sync()
 
     }

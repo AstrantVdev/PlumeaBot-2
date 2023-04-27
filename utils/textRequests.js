@@ -9,7 +9,7 @@ module.exports = {
 
     async addOne(mesId, senderId, textId){
 
-        await db.tabCreate(TR_TAB, {
+        await db.tabCreate({
             mesId: mesId,
             textId: textId,
             senderId: senderId,
