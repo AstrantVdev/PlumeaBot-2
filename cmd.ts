@@ -1,17 +1,14 @@
-/**
- * Abstract Class Cmd.
- *
- * @class Cmd
- */
 import {
     ButtonInteraction,
     CommandInteraction,
     ModalBuilder, ModalSubmitInteraction, SelectMenuInteraction
-} from "discord.js";
+} from "discord.js"
+import{DIRNAME} from "index.js"
+const path = require('path')
+import fs = require('fs')
+const { c } = require("./config.js")
 
-const { c } = require("./newConfig.js");
-
-class error{
+class error {
     public errorId: any
     public lvl: any
     public customMes: any
@@ -23,7 +20,7 @@ class error{
     }
 
 }
-class Inter {
+export class Inter {
     public channelIds: Array<String>
     public categoryIds: Array<String>
     public roleIds: Array<String>
@@ -36,8 +33,12 @@ class Inter {
 
     }
 
-    async interExe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction) : Promise<void> {
-        await inter.deferReply()
+    public get() {
+        throw new Error("Method 'data()' must be implemented.")
+    }
+
+    public async interExe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction) : Promise<void> {
+        await inter.deferReply({ephemeral: true})
 
         let errors : Array<error> = []
 
@@ -66,11 +67,11 @@ class Inter {
 
     }
 
-    exe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction, errors : Array<error>) : void {
+    public exe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction, errors : Array<error>) : void {
         throw new Error("Method 'exe()' must be implemented.")
     }
 
-    sendErrors(inter, errors : Array<error>) : void {
+    private sendErrors(inter, errors : Array<error>) : void {
         const mUtil = require("./utils/message.js")
         const { colors } = require('./utils/message.js')
 
@@ -108,6 +109,32 @@ class Inter {
                 break
         }
 
+        if(inter.isChatInputCommand()){
+            userMes.embeds[0].description += `\n\n</${inter.commandName}:${inter.customId}>`
+        }else if(inter.isModalSubmit()){
+            const args = inter.customId.split('/')
+            const id = args[0]
+
+            const itemsPath = path.join(DIRNAME, "modals")
+            const items = fs.readdirSync(itemsPath).filter(file => file.endsWith('.js'))
+
+            for(let i of items){
+                const modal = new (require(path.join(itemsPath, i)[i.slice(0, -3)]))(args)
+
+                i = require(path.join(itemsPath, i))
+
+                if(modal.id === id){
+                    userMes.components.push(modal.getButton())
+                    modal.execute(inter)
+                    return
+                }
+
+            }
+
+        }else if(inter.isStringSelectMenu() || inter.isChannelSelectMenu() || inter.isMentionableSelectMenu() || inter.isRoleSelectMenu() || inter.isUserSelectMenu()){
+
+        }
+
         //reply to user
         if(userMes.embeds[0].description == null) userMes.embeds[0].description = c.errors.cmds.default
         inter.editReply(userMes)
@@ -132,12 +159,12 @@ class Inter {
 
     }
 
-    chooseInterMessageTitle(inter){
+    private chooseInterMessageTitle(inter){
         let title = { files: [], content: null }
         let options = []
 
         if(inter.isChatInputCommand()){
-            title.content = '/ ' + inter.commandName
+            title.content = `/ ${inter.commandName} </${inter.commandName}:${inter.customId}>`
             const cmdOptions = inter.options._hoistedOptions
 
             if(cmdOptions){
@@ -178,7 +205,7 @@ class Inter {
 
     }
 
-    getSuccessMes(key, args){
+    private getSuccessMes(key, args){
         let mes = require("./newConfig.js").c.success.cmds[key]
 
         for (const arg in args){
@@ -189,7 +216,7 @@ class Inter {
 
     }
 
-    interSuccess(inter, customReply=null, args = []) : void {
+    public success(inter, customReply=null, args = []) : void {
         const mUtil = require("./utils/message.js")
         const { colors } = require('./utils/message.js')
 
@@ -239,10 +266,6 @@ class Inter {
 
     }
 
-    success(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction){
-        throw new Error("Method 'success()' must be implemented.")
-    }
-
 }
 
 class Cmd extends Inter{
@@ -255,12 +278,8 @@ class Cmd extends Inter{
 
     }
 
-    data() {
-        throw new Error("Method 'data()' must be implemented.")
-    }
-
-    exe() {
+    public exe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction) : Promise<void> {
         throw new Error("Method 'exe()' must be implemented.")
     }
-    
+
 }

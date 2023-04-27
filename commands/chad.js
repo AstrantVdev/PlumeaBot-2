@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js')
-const { config } = require('../config')
+const { c } = require('../config')
 const mes = require("../utils/message")
 
 module.exports = {
@@ -20,7 +20,7 @@ module.exports = {
 
         await mes.interSuccess(inter, 'GIGA CHAD!!!')
 
-        const chad = config.messageReplies.CHAD
+        const chad = c.messageReplies.CHAD
 
         for (let i = 0 ; i < n ; i++) {
             inter.channel.send(chad)

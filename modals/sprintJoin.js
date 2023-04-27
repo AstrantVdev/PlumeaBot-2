@@ -2,7 +2,7 @@ const { ModalBuilder, TextInputBuilder, ActionRowBuilder } = require('discord.js
 const mes = require("../utils/message")
 const sprint = require('../utils/sprint')
 const somes = require("../utils/somes")
-const { config } = require("../config")
+const { c } = require("../config")
 
 module.exports = {
     name: 'sprintJoin',

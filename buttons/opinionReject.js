@@ -1,7 +1,7 @@
 const { ButtonBuilder, ActionRowBuilder} = require('discord.js')
 const mes = require("../utils/message")
 const oUtils = require("../utils/opinion")
-const  { config } = require("../config")
+const  { c } = require("../config")
 const somes = require("../utils/somes")
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
         const uuid = inter.customId.split('/')[1]
         const senderId = await oUtils.getSenderId(uuid)
 
-        if(! await somes.memberCheckRoles(inter.member, [config.roles.guard, config.roles.staff])){
+        if(! await somes.memberCheckRoles(inter.member, [c.roles.guard, c.roles.staff])){
             await mes.interError(inter, "Tu fais quoi là -_-")
             return
         }
@@ -20,7 +20,7 @@ module.exports = {
 
         await inter.message.edit({ components: [] })
 
-        const ticket = await client.channels.fetch(config.channels.ticket)
+        const ticket = await client.channels.fetch(c.channels.ticket)
         const embed = mes.newEmbed(mes.colors.yellow)
             .setDescription(`Désolé mais ton commentaire a été invalidé... Si aucune explication n'est fournie ci-dessous, crée un ${ticket}`)
 

@@ -1,7 +1,7 @@
 const { ActionRowBuilder, StringSelectMenuBuilder  } = require('discord.js')
 const mes = require("../utils/message")
 const tUtils = require("../utils/text")
-const { config } = require("../config")
+const { c } = require("../config")
 
 module.exports = {
     name: 'textProtect',
@@ -35,8 +35,8 @@ module.exports = {
             const postId = await tUtils.getPostId(textUUID)
             const postMesId = await tUtils.getPostMesId(textUUID)
 
-            await mes.updateMesComp(config.channels.safe, safeMesId, lockButton, 4)
-            await mes.updateMesComp(config.channels.text, textMesId, lockButton, 4)
+            await mes.updateMesComp(c.channels.safe, safeMesId, lockButton, 4)
+            await mes.updateMesComp(c.channels.text, textMesId, lockButton, 4)
             await mes.updateMesComp(postId, postMesId, lockButton, 4)
 
             let getButton

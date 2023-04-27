@@ -1,6 +1,6 @@
 const { SlashCommandBuilder} = require('discord.js')
 const mes =  require('../utils/message')
-const { config } = require('../config')
+const { c } = require('../config')
 const sUtils = require('../utils/sprint')
 
 module.exports = {
@@ -36,7 +36,7 @@ module.exports = {
             */
 
         }else{
-            await mes.interError(inter,'Mauvais salon, va dans <#' + config.channels.sprint + ">")
+            await mes.interError(inter,'Mauvais salon, va dans <#' + c.channels.sprint + ">")
         }
     
     }

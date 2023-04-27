@@ -1,7 +1,7 @@
 const { ActionRowBuilder, StringSelectMenuBuilder  } = require('discord.js')
 const tUtils = require("../utils/text")
 const mes = require("../utils/message")
-const { config } =  require("../config")
+const { c } =  require("../config")
 
 module.exports = {
     name: 'textThemes',
@@ -42,7 +42,7 @@ module.exports = {
             defaultThemes = await tUtils.getThemes(textModelUUID)
         }
 
-        const themes = config.themes
+        const themes = c.themes
         themes.forEach(t => {
             let option = { label: t.name, description: t.desc, value: t.name }
             /*

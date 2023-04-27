@@ -1,4 +1,4 @@
-const { config } = require('../config')
+const { c } = require('../config')
 const {ActionRowBuilder, ButtonBuilder} = require("discord.js");
 
 module.exports = {
@@ -30,7 +30,7 @@ module.exports = {
         return sent
     },
 
-    getLinkButton(link, label, emote = config.emotes.plume, row = false){
+    getLinkButton(link, label, emote = c.emotes.plume, row = false){
 
         const button = new ButtonBuilder()
             .setLabel(label)
@@ -124,7 +124,7 @@ module.exports = {
         const embeds = Array.from(mes.embeds.values())
         const components = Array.from(mes.components.values())
 
-        const sendMes = await this.sendMes(config.channels.delete, {embeds: [embed]})
+        const sendMes = await this.sendMes(c.channels.delete, {embeds: [embed]})
         await sendMes.reply( {
             content: content,
             files: files,
@@ -236,7 +236,7 @@ module.exports = {
             .setTitle(title.content)
             .setDescription(`**Success** | ${inter.member.user} | <#${inter.channel.id}>`)
 
-        await this.sendMes(config.channels.logs, {embeds: [embed], files: title.files})
+        await this.sendMes(c.channels.logs, {embeds: [embed], files: title.files})
 
     },
 

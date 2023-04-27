@@ -1,6 +1,6 @@
 const db =  require('../dbObjects')
 const mes =  require('../utils/message')
-const { config } = require('../config')
+const { c } = require('../config')
 const {ActionRowBuilder} = require("discord.js");
 
 module.exports = {
@@ -84,7 +84,7 @@ module.exports = {
     },
 
     async isChannel(id){
-        return config.channels.sprint === id
+        return c.channels.sprint === id
 
     },
 
@@ -109,12 +109,12 @@ module.exports = {
 
     async updateRunningMessageDesc(id){
         const mesId = await this.getMessageId(id)
-        const message = await mes.getMes(config.channels.sprint, mesId)
+        const message = await mes.getMes(c.channels.sprint, mesId)
         let embed = message.embeds[0]
 
         embed.data.description = await this.getRunningMessageDesc(id)
 
-        await mes.editMes(config.channels.sprint, mesId, { embeds: [embed] })
+        await mes.editMes(c.channels.sprint, mesId, { embeds: [embed] })
     },
 
     async beginMessageGet(id, date, inter){
@@ -142,14 +142,14 @@ module.exports = {
             description += '<@'+s[0]+'>\n'
         })
 
-        const message = await mes.getMes(config.channels.sprint, mesId)
+        const message = await mes.getMes(c.channels.sprint, mesId)
         let embed = message.embeds[0]
 
         let date = await this.getEnd(id)
         date = (date.getTime() / 1000).toFixed(0)
         embed.data.title = `Le sprint se termine à <t:${date}:T> <t:${date}:R> :D`
 
-        const newMes = await mes.sendMes(config.channels.sprint, { embeds: [embed], components: message.components })
+        const newMes = await mes.sendMes(c.channels.sprint, { embeds: [embed], components: message.components })
 
         await this.setMessageId(id, newMes.id)
         message.delete()
@@ -157,7 +157,7 @@ module.exports = {
     },
 
     async endMessageSend(id){
-        const cId = config.channels.sprint
+        const cId = c.channels.sprint
 
         const mesId = await this.getMessageId(id)
         const message = await mes.getMes(cId, mesId)
@@ -178,7 +178,7 @@ module.exports = {
     },
 
     async endMessageUpdate(id, userId, words, beginWords){
-        const cId = config.channels.sprint
+        const cId = c.channels.sprint
         const mesId = await this.getMessageId(id)
 
         const time = await this.getTime(id)
@@ -203,7 +203,7 @@ module.exports = {
     
 
     async removeMessageButtons(id){
-        await mes.editMes(config.channels.sprint, await this.getMessageId(id), { components:[] })
+        await mes.editMes(c.channels.sprint, await this.getMessageId(id), { components:[] })
     },
 
 
@@ -218,7 +218,7 @@ module.exports = {
         date.setSeconds(date.getSeconds() + wait)
         await this.setWaitEnd(id, date)
 
-        const message = await mes.sendMes(config.channels.sprint, await this.beginMessageGet(id, date, inter))
+        const message = await mes.sendMes(c.channels.sprint, await this.beginMessageGet(id, date, inter))
 
         await this.setMessageId(id, message.id)
 
@@ -240,8 +240,8 @@ module.exports = {
                 clearInterval(BEGIN)
 
             }else{
-                const message = await mes.getMes(config.channels.sprint, await sprint.getMessageId(id))
-                const newMes = await mes.sendMes(config.channels.sprint, { embeds: message.embeds, components: message.components })
+                const message = await mes.getMes(c.channels.sprint, await sprint.getMessageId(id))
+                const newMes = await mes.sendMes(c.channels.sprint, { embeds: message.embeds, components: message.components })
                 await message.delete()
                 await sprint.setMessageId(id, newMes.id)
 
@@ -262,8 +262,8 @@ module.exports = {
                 clearInterval(goScope)
 
             }else{
-                const message = await mes.getMes(config.channels.sprint, await sprint.getMessageId(id))
-                const newMes = await mes.sendMes(config.channels.sprint, { embeds: message.embeds, components: message.components })
+                const message = await mes.getMes(c.channels.sprint, await sprint.getMessageId(id))
+                const newMes = await mes.sendMes(c.channels.sprint, { embeds: message.embeds, components: message.components })
                 await message.delete()
                 await sprint.setMessageId(id, newMes.id)
 

@@ -1,7 +1,7 @@
 const { ButtonBuilder, ActionRowBuilder } = require('discord.js')
 const mes = require("../utils/message")
 const somes = require("../utils/somes");
-const {config} = require("../config");
+const {c} = require("../config");
 
 module.exports = {
     name: 'textEdit',
@@ -12,7 +12,7 @@ module.exports = {
         const textAuthor = await tUtils.getAuthorId(textId)
 
         const member = inter.member
-        if(member.user.id === textAuthor || await somes.memberCheckRoles(inter.member, [config.roles.staff])){
+        if(member.user.id === textAuthor || await somes.memberCheckRoles(inter.member, [c.roles.staff])){
             const textId_Text = await require("../buttons/textModalTitle").get(textId, textId, 0, false)
             const textModal1 = await require("../buttons/textModal1").get(textId, textId, 0, false)
             const textThemes = await require("../buttons/textThemes").get(textId, textId, 0, false)

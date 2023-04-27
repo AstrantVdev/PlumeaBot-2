@@ -1,13 +1,28 @@
 module.exports = {
-    config: 
+    c:
     {
+        errors:{
+            cmds:{
+                default: 'Une erreur est survenue, vous pouvez contacter <@548551538487066629> pour vous aider',
+                channel: 'Interaction réservée aux salons:\n #uwu',
+                category: 'Interaction réservée aux catégories:\n #uwu',
+                user: 'Interaction réservée aux catégories:\n #uwu',
+                role: 'Interaction réservée aux roles:\n #uwu'
+            }
+        },
+
+        success:{
+            cmds:{
+                default: '**Action accomplie avec succès ! :D**',
+            }
+        },
+
         weeklyPlumes: 1,
 
         messages: {
             leaderboard: '1080134170124222587',
             tutoPost: 'https://discord.com/channels/1066783578140180520/1066783579079716895/1075837538595520655',
             tutoComment: 'https://discord.com/channels/1066783578140180520/1066783579079716895/1075837538595520655'
-
         },
 
         channels: {

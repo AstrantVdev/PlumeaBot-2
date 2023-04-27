@@ -1,6 +1,6 @@
 const db = require('../dbObjects.js')
 const mes = require('../utils/message')
-const { config } = require('../config')
+const { c } = require('../config')
 const tUtils = require('../utils/text')
 const { Op } = require("sequelize")
 
@@ -120,7 +120,7 @@ module.exports = {
     },
 
     async removeFileInPostingMes(id){
-        await mes.delMes(config.channels.safe, await this.getFileInPostingMesId(id))
+        await mes.delMes(c.channels.safe, await this.getFileInPostingMesId(id))
     },
 
     async addFileInPosting(user, file){
@@ -128,7 +128,7 @@ module.exports = {
             .setTitle("Texte en /post")
             .setDescription(`par ${user}`)
 
-        const fileInPostingMes = await mes.sendMes(config.channels.safe, {embeds: [embed], files: [file]})
+        const fileInPostingMes = await mes.sendMes(c.channels.safe, {embeds: [embed], files: [file]})
         await this.setFileInPostingMesId(user.id, fileInPostingMes.id)
 
     },

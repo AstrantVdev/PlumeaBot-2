@@ -1,4 +1,4 @@
-const { config } = require('../config')
+const { c } = require('../config')
 const { getBumpDate, setBumpDate } = require('../utils/somes')
 const mUtils = require("../utils/member")
 const mes = require("../utils/message")
@@ -15,13 +15,13 @@ module.exports = {
             const content = message.content
 
             //message.react(':champagne_glass:') //pour noel
-            let r = Math.floor(Math.random() * (64 * 100 / config.weeklyPlumes))
-            if(r === 1) await message.react(config.emotes.love)
+            let r = Math.floor(Math.random() * (64 * 100 / c.weeklyPlumes))
+            if(r === 1) await message.react(c.emotes.love)
 
-            r = Math.floor(Math.random() * (64 * 1000 / config.weeklyPlumes))
-            if(r === 1) await message.react(config.emotes.chad)
+            r = Math.floor(Math.random() * (64 * 1000 / c.weeklyPlumes))
+            if(r === 1) await message.react(c.emotes.chad)
 
-            const triggersJson = config.messageReplies
+            const triggersJson = c.messageReplies
             const triggers = new Map(Object.entries(triggersJson))
             triggers.forEach((reply,trigger)=>{
                 if (content.includes(trigger)) {
@@ -31,17 +31,17 @@ module.exports = {
 
             switch(channelId){
 
-                case config.channels.central:
+                case c.channels.central:
                     message.delete()
                     await mes.private(author, 'Utilise la commande `/post` pour partager ton texte ;3')
                     return
 
-                case config.channels.sesame:
+                case c.channels.sesame:
                     message.delete()
                     await mes.private(author, 'Tape la commande `/sesame` `code` pour accéder au serveur')
                     return
 
-                case config.channels.general:
+                case c.channels.general:
                     const today = new Date()
                     const recall = await getBumpDate()
     
@@ -73,7 +73,7 @@ module.exports = {
             }
 
 
-            if(message.channel.parentId === config.channels.textForum){
+            if(message.channel.parentId === c.channels.textForum){
 
                 if(await mUtils.exists(id)){
 
@@ -84,7 +84,7 @@ module.exports = {
                             await message.reply(reply)
                         }
 
-                        await mUtils.addTutoId(id, config.tutoIds.commentaire)
+                        await mUtils.addTutoId(id, c.tutoIds.commentaire)
 
                     }
 

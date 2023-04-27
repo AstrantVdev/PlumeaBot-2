@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, ActionRowBuilder} = require('discord.js')
 const mes =  require('../utils/message')
 const tUtils = require("../utils/text")
-const { config } = require("../config")
+const { c } = require("../config")
 const oUtils = require("../utils/opinion")
 const uuidCreate = require("uuid");
 
@@ -20,7 +20,7 @@ module.exports = {
         const id = member.id
 
         if(!textUUID){
-            const postChannel = await client.channels.fetch(config.channels.textForum)
+            const postChannel = await client.channels.fetch(c.channels.textForum)
             await mes.interError(inter, `Va dans le channel associé au texte pour poster ton ${postChannel} \n Et si ce poste est fermé c'est que l'auteur a retiré son texte`)
             return
         }
@@ -51,7 +51,7 @@ module.exports = {
         const buttons = new ActionRowBuilder()
             .setComponents(validButton, refuseButton)
 
-        const message = await inter.channel.send({ content: `<@&${config.roles.staff}>`, embeds: [embed], components: [buttons] })
+        const message = await inter.channel.send({ content: `<@&${c.roles.staff}>`, embeds: [embed], components: [buttons] })
 
         await oUtils.createOne(uuid, words, textUUID, id, message.id)
 

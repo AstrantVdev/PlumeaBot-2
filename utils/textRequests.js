@@ -1,6 +1,6 @@
 const db = require("../dbObjects")
 const mes = require('../utils/message')
-const { config } = require("../config")
+const { c } = require("../config")
 const tUtils = require("../utils/text")
 const { ActionRowBuilder } = require("discord.js");
 const {Op} = require("sequelize");
@@ -32,7 +32,7 @@ module.exports = {
                 require("../buttons/textRequestDeny").get(senderId, textId),
             )
 
-        return await mes.sendMes(config.channels.textRequest, { content: `<@${authorId}>`, embeds: [embed], components: [row]})
+        return await mes.sendMes(c.channels.textRequest, { content: `<@${authorId}>`, embeds: [embed], components: [row]})
 
     },
 
@@ -47,7 +47,7 @@ module.exports = {
             .setImage("https://cdn.discordapp.com/attachments/1075907880055742494/1077992029956608050/plumea_demo.gif")
 
         const row = require("../buttons/textGet").get(textId, senderId, true)
-        return await mes.sendMes(config.channels.textRequest, { content: `<@${senderId}>`, embeds: [embed], components: [row]})
+        return await mes.sendMes(c.channels.textRequest, { content: `<@${senderId}>`, embeds: [embed], components: [row]})
 
     },
 
@@ -63,7 +63,7 @@ module.exports = {
     },
 
     async sendDeny(senderId, textId){
-        return await mes.sendMes(config.channels.textRequest, await this.getDenyMes(textId, senderId))
+        return await mes.sendMes(c.channels.textRequest, await this.getDenyMes(textId, senderId))
 
     },
 
@@ -88,7 +88,7 @@ module.exports = {
     },
 
     async sendTimeout(senderId, textId){
-        return await mes.sendMes(config.channels.textRequest, await this.getTimeoutMes(textId))
+        return await mes.sendMes(c.channels.textRequest, await this.getTimeoutMes(textId))
 
     },
 
@@ -111,7 +111,7 @@ module.exports = {
 
     async removeMes(senderId, textId){
         const mesId = await this.getMesId(senderId, textId)
-        await mes.delMes(config.channels.textRequest, mesId)
+        await mes.delMes(c.channels.textRequest, mesId)
     },
 
     async setMesId(senderId, textId, mesId){
@@ -155,7 +155,7 @@ module.exports = {
     },
 
     async delMes(senderId, textId){
-        await mes.delMes(config.channels.textRequest, await this.getMesId(senderId, textId))
+        await mes.delMes(c.channels.textRequest, await this.getMesId(senderId, textId))
     },
 
     async setDenied(senderId, textId){

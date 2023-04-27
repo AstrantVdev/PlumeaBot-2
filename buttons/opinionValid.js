@@ -3,7 +3,7 @@ const oUtils = require("../utils/opinion")
 const mes = require("../utils/message")
 const tUtils = require("../utils/text")
 const somes = require("../utils/somes");
-const {config} = require("../config");
+const {c} = require("../config");
 
 module.exports = {
     name: 'opinionValid',
@@ -14,7 +14,7 @@ module.exports = {
         const id = inter.member.id
         const senderId = await oUtils.getSenderId(uuid)
 
-        if(! await somes.memberCheckRoles(member, [config.roles.guard, config.roles.staff])){
+        if(! await somes.memberCheckRoles(member, [c.roles.guard, c.roles.staff])){
             await mes.interError(inter, "Tu fais quoi là -_-")
             return
         }

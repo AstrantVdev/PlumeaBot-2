@@ -1,6 +1,6 @@
 const db = require("../dbObjects")
 const m = require("./member");
-const {config} = require("../config");
+const {c} = require("../config");
 const mes = require("./message");
 const somes = require("../utils/somes")
 const {dirname} = require("path");
@@ -26,21 +26,21 @@ module.exports = {
         const plumes = await m.getPlumes(member.id)
 
         let embed = mes.newEmbed()
-            .setDescription(`**${member} Possède maintenant *${plumes}*  ${config.emotes.plume}**\n\n ${p} plumes par ${who}\n\n ||${textUUID}||`)
+            .setDescription(`**${member} Possède maintenant *${plumes}*  ${c.emotes.plume}**\n\n ${p} plumes par ${who}\n\n ||${textUUID}||`)
 
         require('../utils/somes').plumesRolesSet(member, plumes, inter)
 
         require('../utils/leaderboard.js').edit()
 
-        const counter = await client.channels.fetch(config.channels.counter)
+        const counter = await client.channels.fetch(c.channels.counter)
         await this.addPlumesTotal(p)
 
         await this.addWeeklyPlumes(p)
-        require("../config").config.weeklyWords += p
+        require("../config").c.weeklyWords += p
 
         counter.setName("PLUMES : " + await this.getPlumesTotal())
 
-        return await mes.sendMes(config.channels.plumes, { embeds: [embed] })
+        return await mes.sendMes(c.channels.plumes, { embeds: [embed] })
 
     },
 

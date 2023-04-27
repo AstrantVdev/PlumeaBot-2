@@ -3,7 +3,7 @@ const { ModalBuilder, TextInputBuilder, ActionRowBuilder,
 } = require('discord.js')
 const mUtils = require("../utils/member")
 const tUtils = require("../utils/text")
-const config = require("../config").config
+const config = require("../config").c
 const mes = require("../utils/message")
 const mesUtils = require("../utils/message")
 const pdf = require("../utils/pdf")

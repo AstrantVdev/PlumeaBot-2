@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js')
 const mes =  require('../utils/message')
 const m = require('../utils/member')
-const { config } = require("../config")
+const { c } = require("../config")
 
 module.exports = {
 	data(){
@@ -27,7 +27,7 @@ module.exports = {
 		const coins = await m.getCoins(id)
 		const weeklyWords = await m.getWeeklyWords(id)
 
-		const json = config.plumesRoles
+		const json = c.plumesRoles
 		const roles = new Map(Object.entries(json))
 
 		let color = mes.colors.blue

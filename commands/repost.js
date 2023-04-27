@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js')
 const mes =  require('../utils/message')
-const { config } =  require("../config")
+const { c } =  require("../config")
 const pdf = require("../utils/pdf")
 
 module.exports = {
@@ -32,7 +32,7 @@ module.exports = {
 
             if(pdf.checkExtension(file, "pdf")){
                 pdf.rename(file, id_text)
-                await mes.editMes(config.channels.safe, fileId.fileMesId, { files: [file] })
+                await mes.editMes(c.channels.safe, fileId.fileMesId, { files: [file] })
 
                 await mes.interSuccess(inter)
 

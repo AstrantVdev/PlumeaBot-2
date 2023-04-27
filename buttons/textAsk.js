@@ -1,7 +1,7 @@
 const { ButtonBuilder, ActionRowBuilder } = require('discord.js')
 const mes = require("../utils/message")
 const rUtils = require("../utils/textRequests")
-const { config } = require("../config")
+const { c } = require("../config")
 
 module.exports = {
     name: 'textAsk',
@@ -15,7 +15,7 @@ module.exports = {
             const message = await rUtils.sendMes(inter.member.user, textId)
             await rUtils.addOne(message.id, id, textId)
 
-            await mes.interSuccess(inter, "L'accès à ce texte est limité. Une demande a été faite dans le salon <#" + config.channels.textRequest + ">")
+            await mes.interSuccess(inter, "L'accès à ce texte est limité. Une demande a été faite dans le salon <#" + c.channels.textRequest + ">")
 
         }else{
             date.setDate(date.getDate() + 8)

@@ -1,5 +1,5 @@
 const { ActionRowBuilder, StringSelectMenuBuilder  } = require('discord.js')
-const { config } =  require("../config")
+const { c } =  require("../config")
 const mUtils = require("../utils/member")
 const mes = require("../utils/message")
 
@@ -18,7 +18,7 @@ module.exports = {
                 setTimeout(async () => {
                     await mUtils.removeMember(id)
                     const m = await inter.guild.members.fetch(id)
-                    await m.roles.remove(config.roles.pluméen)
+                    await m.roles.remove(c.roles.pluméen)
 
                 }, i * 1000)
 

@@ -222,7 +222,7 @@ module.exports = {
             this.autoSet()
 
         }, 2000)
-        require("./config").config.weeklyWords = await require("./utils/opinion").getWeeklyPlumes()
+        require("./config").c.weeklyWords = await require("./utils/opinion").getWeeklyPlumes()
 
     },
 

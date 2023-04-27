@@ -1,5 +1,5 @@
 const mes = require('../utils/message')
-const { config } = require('../config')
+const { c } = require('../config')
 const db = require("../dbObjects")
 const { Op } = require("sequelize")
 const m = require("./member");
@@ -138,7 +138,7 @@ module.exports = {
     },
 
     async getFileMes(id){
-        return await mes.getMes(config.channels.safe, await this.getFileMesId(id))
+        return await mes.getMes(c.channels.safe, await this.getFileMesId(id))
     },
 
     async setFileMesId(id, fileMes){
@@ -194,15 +194,15 @@ module.exports = {
     },
 
     async removeTextMes(id){
-        await mes.delMes(config.channels.text, await this.getTextMesId(id))
+        await mes.delMes(c.channels.text, await this.getTextMesId(id))
     },
 
     async removeFileMes(id){
-        await mes.delMes(config.channels.safe, await this.getFileMesId(id))
+        await mes.delMes(c.channels.safe, await this.getFileMesId(id))
     },
 
     async sendFile(id, member){
-        const message = await mes.getMes(config.channels.safe, await this.getFileMesId(id))
+        const message = await mes.getMes(c.channels.safe, await this.getFileMesId(id))
         const file = message.attachments.first()
         const authorId = await this.getAuthorId(id)
         const author = await client.users.fetch(authorId)
@@ -219,14 +219,14 @@ module.exports = {
         const { ButtonBuilder, ActionRowBuilder } = require('discord.js')
 
         const postButton = mes.getLinkButton(
-            config.messages.tutoPost,
+            c.messages.tutoPost,
             'Comment poster son texte ?',
             '🧭',
             true
         )
 
         const commentButton = mes.getLinkButton(
-            config.messages.tutoComment,
+            c.messages.tutoComment,
             'Comment commenter un texte ?',
             '🧭',
             true
@@ -235,9 +235,9 @@ module.exports = {
         const buttonMes = { content: '|\n|\n|\n|', components: [postButton, commentButton] }
 
         const postMesId = await db.tabGetAtr(PIDS_TAB, 'textPostMessage', 'paramId')
-        await mes.delMes(config.channels.text, postMesId)
+        await mes.delMes(c.channels.text, postMesId)
 
-        const message = await mes.sendMes(config.channels.text, buttonMes)
+        const message = await mes.sendMes(c.channels.text, buttonMes)
         await db.tabSetAtr(PIDS_TAB, 'textPostMessage', 'paramId', message.id)
 
     },
@@ -298,7 +298,7 @@ module.exports = {
     getThemesIdsByNames(themes){
         let themesIds = []
 
-        for(const t of config.themes){
+        for(const t of c.themes){
             if(themes.includes(t.name)){
                 themesIds.push(t.id)
             }

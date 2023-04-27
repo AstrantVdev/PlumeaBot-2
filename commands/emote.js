@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js')
-const { config } = require('../config')
+const { c } = require('../config')
 const mes = require("../utils/message")
 const db = require("../dbObjects")
 const editJsonFile = require("edit-json-file")
@@ -13,7 +13,7 @@ module.exports = {
 	},
 
 	async execute(inter) {
-		await mes.interSuccess(inter, { content: config.emotes.plume, formatted: true, ephemeral: false })
+		await mes.interSuccess(inter, { content: c.emotes.plume, formatted: true, ephemeral: false })
 
 		/*
 		const data = editJsonFile("DATA.json")

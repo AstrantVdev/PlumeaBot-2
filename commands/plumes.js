@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js')
 const mes =  require('../utils/message')
-const { config } = require('../config')
+const { c } = require('../config')
 const oUtils = require("../utils/opinion")
 const m = require("../utils/member")
 
@@ -8,7 +8,7 @@ module.exports = {
 	data(){
         return new SlashCommandBuilder()
             .setName('plumes')
-            .setDescription('Ajoute un nombre de plumes à un' + config.string.inhab + ', négatif ou positif, au choix')
+            .setDescription('Ajoute un nombre de plumes à un' + c.string.inhab + ', négatif ou positif, au choix')
             .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
             .addUserOption(option => option
                 .setName('user')

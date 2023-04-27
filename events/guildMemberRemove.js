@@ -1,6 +1,6 @@
 const mes = require('../utils/message')
 const m =  require('../utils/member')
-const { config } = require('../config')
+const { c } = require('../config')
 const t = require("../utils/text");
 
 module.exports = {
@@ -33,7 +33,7 @@ module.exports = {
             .setAuthor({ name: 'Niooon !', iconURL: 'https://i.imgur.com/TYeapMy.png', url: 'https://www.youtube.com/watch?v=xvFZjo5PgG0' })
             .setThumbnail(member.displayAvatarURL())
 
-        const cya = config.channels.cya
+        const cya = c.channels.cya
         await mes.sendMes(cya, {embeds: [cyaMessage]})
 		
 	}

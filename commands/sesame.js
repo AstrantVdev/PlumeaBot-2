@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js')
-const { config } = require("../config")
+const { c } = require("../config")
 const mes = require("../utils/message")
 const {exists, addMember} = require("../utils/member");
 
@@ -18,7 +18,7 @@ module.exports = {
     async execute(inter) {
         const pass = inter.options.getString('pass')
         const member = inter.member
-        const plumeRole = config.roles.plumeen
+        const plumeRole = c.roles.plumeen
 
         if(member.roles.cache.has(plumeRole)){
             await mes.interError(inter, 'Tu fais quoi là -_-')
@@ -41,7 +41,7 @@ module.exports = {
                     .setAuthor({ name: 'Youpiii !',iconURL: 'https://i.imgur.com/TYeapMy.png', url: 'https://tenor.com/view/rickroll-roll-rick-never-gonna-give-you-up-never-gonna-gif-22954713' })
                     .setThumbnail(member.displayAvatarURL())
 
-                const welcome = config.channels.welcome
+                const welcome = c.channels.welcome
                 await mes.sendMes(welcome, { embeds: [welcomeMessage]})
 
                 const socials =

@@ -6,7 +6,7 @@ const mUtils = require("../utils/member")
 const tUtils = require("../utils/text")
 const uuidCreate = require("uuid");
 const pdf = require("../utils/pdf")
-const { config } = require('../config')
+const { c } = require('../config')
 const oUtils = require("../utils/opinion")
 
 module.exports = {
@@ -31,8 +31,8 @@ module.exports = {
             return
         }
 
-        if(inter.channel.id !== config.channels.central){
-            await mes.interError(inter, "Va faire cette commande dans le <#" + config.channels.central + ">")
+        if(inter.channel.id !== c.channels.central){
+            await mes.interError(inter, "Va faire cette commande dans le <#" + c.channels.central + ">")
             return
         }
 

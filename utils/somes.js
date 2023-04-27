@@ -1,6 +1,6 @@
 const tab =  require('../dbObjects')
 const mes =  require('../utils/message')
-const config = require("../config").config
+const config = require("../config").c
 
 module.exports = {
 

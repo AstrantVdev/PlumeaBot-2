@@ -1,11 +1,11 @@
-const { config } = require('../config')
+const { c } = require('../config')
 const mes =  require('../utils/message')
 const { getAllIdsPlumes } = require('../utils/member')
 
 module.exports = {
     async edit(){
-        const channelId = config.channels.leaderboard
-        const mesId = config.messages.leaderboard
+        const channelId = c.channels.leaderboard
+        const mesId = c.messages.leaderboard
 
         await mes.editMes(channelId, mesId, {content:'', embeds: [await this.create()]} )
 
