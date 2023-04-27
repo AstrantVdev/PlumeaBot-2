@@ -3,10 +3,9 @@ import {
     CommandInteraction,
     ModalBuilder, ModalSubmitInteraction, SelectMenuInteraction
 } from "discord.js"
-import{DIRNAME} from "index.js"
-const path = require('path')
-import fs = require('fs')
 const { c } = require("./config.js")
+import {getAllFilesInDir} from "./util"
+import {Menu} from "./menu"
 
 class error {
     public errorId: any
@@ -21,10 +20,10 @@ class error {
 
 }
 export class Inter {
-    public channelIds: Array<String>
-    public categoryIds: Array<String>
-    public roleIds: Array<String>
-    public userIds: Array<String>
+    public channelIds: [string]
+    public categoryIds: [string]
+    public roleIds: [string]
+    public userIds: [string]
 
     constructor() {
         if (this.constructor === Cmd) {
@@ -34,10 +33,10 @@ export class Inter {
     }
 
     public get() {
-        throw new Error("Method 'data()' must be implemented.")
+        throw new Error("Method 'get()' must be implemented.")
     }
 
-    public async interExe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction) : Promise<void> {
+    public async exe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction) : Promise<void> {
         await inter.deferReply({ephemeral: true})
 
         let errors : Array<error> = []
@@ -57,7 +56,7 @@ export class Inter {
         if(!hasRole) errors.push(c.errors.cmds.role)
 
 
-        this.exe(inter, errors)
+        this.customExe(inter, errors)
 
         if(! errors){
             this.success(inter)
@@ -67,7 +66,7 @@ export class Inter {
 
     }
 
-    public exe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction, errors : Array<error>) : void {
+    public customExe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction, errors : Array<error>) : void {
         throw new Error("Method 'exe()' must be implemented.")
     }
 
@@ -112,27 +111,19 @@ export class Inter {
         if(inter.isChatInputCommand()){
             userMes.embeds[0].description += `\n\n</${inter.commandName}:${inter.customId}>`
         }else if(inter.isModalSubmit()){
+            addMenuButton("modals")
+        }else if(inter.isStringSelectMenu() || inter.isChannelSelectMenu() || inter.isMentionableSelectMenu() || inter.isRoleSelectMenu() || inter.isUserSelectMenu()){
+            addMenuButton("selectMenus")
+        }
+
+        function addMenuButton(type){
             const args = inter.customId.split('/')
             const id = args[0]
 
-            const itemsPath = path.join(DIRNAME, "modals")
-            const items = fs.readdirSync(itemsPath).filter(file => file.endsWith('.js'))
+            const files = getAllFilesInDir(type)
+            const menu : Menu = new (require(files.filter(file => file.slice(0, -3) == id)[0])[id])(args)
 
-            for(let i of items){
-                const modal = new (require(path.join(itemsPath, i)[i.slice(0, -3)]))(args)
-
-                i = require(path.join(itemsPath, i))
-
-                if(modal.id === id){
-                    userMes.components.push(modal.getButton())
-                    modal.execute(inter)
-                    return
-                }
-
-            }
-
-        }else if(inter.isStringSelectMenu() || inter.isChannelSelectMenu() || inter.isMentionableSelectMenu() || inter.isRoleSelectMenu() || inter.isUserSelectMenu()){
-
+            userMes.components.push(menu.getButton())
         }
 
         //reply to user
@@ -268,7 +259,7 @@ export class Inter {
 
 }
 
-class Cmd extends Inter{
+export class Cmd extends Inter{
 
     constructor() {
         super()
@@ -276,10 +267,6 @@ class Cmd extends Inter{
             throw new Error("Abstract classes can't be instantiated.")
         }
 
-    }
-
-    public exe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction) : Promise<void> {
-        throw new Error("Method 'exe()' must be implemented.")
     }
 
 }

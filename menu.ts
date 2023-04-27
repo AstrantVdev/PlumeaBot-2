@@ -1,6 +1,6 @@
 import {Inter} from "./cmd"
 import {ButtonBuilder, ModalBuilder, ButtonStyle, ActionRowBuilder, TextInputBuilder} from "discord.js";
-class Menu extends Inter{
+export class Menu extends Inter{
     public id : string
     public args : Array<string>
 
@@ -17,7 +17,6 @@ class Menu extends Inter{
 
         const xD = new Inter()
         let test = new (require("./cmd")["Inter"])()
-        test.
 
         const modal = new ModalBuilder()
             .setCustomId(this.id)

@@ -1,6 +1,6 @@
 import {Inter} from "./cmd"
 import {ButtonBuilder, ModalBuilder, ButtonStyle, ActionRowBuilder, TextInputBuilder} from "discord.js";
-class Menu extends Inter{
+export class Menu extends Inter{
     public id : string
     public args : Array<string>
     public row : boolean
