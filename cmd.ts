@@ -7,7 +7,7 @@ const { c } = require("./config.js")
 import {getAllFilesInDir} from "./util"
 import {Menu} from "./menu"
 
-class error {
+export class error {
     public errorId: any
     public lvl: any
     public customMes: any
@@ -55,18 +55,19 @@ export class Inter {
         })
         if(!hasRole) errors.push(c.errors.cmds.role)
 
-
-        this.customExe(inter, errors)
+        let customReply
+        let args = []
+        this.customExe(inter, errors, customReply, args)
 
         if(! errors){
-            this.success(inter)
+            this.success(inter, customReply, args = [])
         }else{
             this.sendErrors(inter, errors)
         }
 
     }
 
-    public customExe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction, errors : Array<error>) : void {
+    public customExe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction, errors : Array<error>, customReply, args) : void {
         throw new Error("Method 'exe()' must be implemented.")
     }
 

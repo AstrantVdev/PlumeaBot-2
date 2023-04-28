@@ -6,7 +6,10 @@ export const c =
                 channel: 'Interaction réservée aux salons:\n #uwu',
                 category: 'Interaction réservée aux catégories:\n #uwu',
                 user: 'Interaction réservée aux catégories:\n #uwu',
-                role: 'Interaction réservée aux roles:\n #uwu'
+                role: 'Interaction réservée aux roles:\n #uwu',
+                accountCreate: {
+                    userExist: "Cet utilisateur existe déjà !"
+                }
             }
         },
 
