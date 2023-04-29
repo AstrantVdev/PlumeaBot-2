@@ -6,24 +6,29 @@ export const types = {
     select_menu: "s"
 
 }
+
 export class Menu extends Inter{
     public id : string
     public type : string
     public args : Array<string>
-    public argsString : Array<string>
+    public argsString : string
 
 
-    constructor(args : Array<string>) {
+    constructor(args : Array<string> | string) {
         super()
         if (this.constructor === Menu) {
             throw new Error("Abstract classes can't be instantiated.")
         }
 
-        // @ts-ignore
-        if(typeof(args) == Array<string>){
+        if(Array.isArray(args)){
             this.args = args
-
         }
+
+        if(typeof args  === "string"){
+            this.argsString = args
+            this.args = args.split("/")
+        }
+
     }
 
     public get() : ModalBuilder | ActionRowBuilder{
