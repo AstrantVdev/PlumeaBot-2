@@ -25,7 +25,7 @@ export class account_create extends Cmd{
 
     }
 
-    async customExe(inter : CommandInteraction, errors : Array<error>, customReply, args) : Promise<void> {
+    async customExe(inter, errors : Array<error>, customReply, args) : Promise<void> {
         const userId = inter.options.getUser('user').id
         const m = new Member(userId)
 
