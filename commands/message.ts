@@ -30,7 +30,7 @@ export class message extends Cmd{
 
         switch(inter.options.getSubcommand()){
             case "send":
-
+                customReply.components = []
                 break
             case "edit":
                 break

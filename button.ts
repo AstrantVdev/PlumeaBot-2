@@ -1,13 +1,13 @@
 import {Inter} from "./cmd"
 import {ButtonBuilder, ModalBuilder, ButtonStyle, ActionRowBuilder, TextInputBuilder} from "discord.js";
-export class Menu extends Inter{
+export class Button extends Inter{
     public id : string
     public args : Array<string>
     public row : boolean
 
     constructor(args, row =true) {
         super()
-        if (this.constructor === Menu) {
+        if (this.constructor === Button) {
             throw new Error("Abstract classes can't be instantiated.")
         }
         this.args = args

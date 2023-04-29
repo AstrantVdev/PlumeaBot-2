@@ -1,40 +1,37 @@
 import {Inter} from "./cmd"
 import {ButtonBuilder, ModalBuilder, ButtonStyle, ActionRowBuilder, TextInputBuilder} from "discord.js";
+
+export const types = {
+    modal: "m",
+    select_menu: "s"
+
+}
 export class Menu extends Inter{
     public id : string
+    public type : string
     public args : Array<string>
+    public argsString : Array<string>
 
-    constructor(args) {
+
+    constructor(args : Array<string>) {
         super()
         if (this.constructor === Menu) {
             throw new Error("Abstract classes can't be instantiated.")
         }
-        this.args = args
+
+        // @ts-ignore
+        if(typeof(args) == Array<string>){
+            this.args = args
+
+        }
     }
 
     public get() : ModalBuilder | ActionRowBuilder{
         throw new Error("Method 'get()' must be implemented.")
-
-        const modal = new ModalBuilder()
-            .setCustomId(this.id)
-            .setTitle('Crée le Sprint ! :D')
-
-        const words = new ActionRowBuilder()
-            .setComponents(
-                new TextInputBuilder()
-                    .setCustomId('words')
-                    .setLabel('Ton nombre actuel de mots')
-                    .setRequired(false)
-                    .setMaxLength(6)
-            )
-
-        // @ts-ignore
-        return modal.addComponents(words)
-
     }
 
-    public defaultButton() : ButtonBuilder{
-        let customId = this.id
+    public button(){
+        let customId = this.type + "/" + this.id
         this.args.forEach(arg => {
             customId += "/" + arg.toString()
         })
@@ -44,18 +41,27 @@ export class Menu extends Inter{
             .setStyle(ButtonStyle.Primary)
     }
 
-    public button(){
-        return this.defaultButton()
-    }
-
     public getButton(row = true){
-        const button = this.defaultButton()
+        const button = this.button()
 
         if(row){
             return new ActionRowBuilder().setComponents(button)
         }
         return button
 
+    }
+
+}
+
+export class Modal extends Menu{
+
+    constructor(args) {
+        super(args)
+        if (this.constructor === Menu) {
+            throw new Error("Abstract classes can't be instantiated.")
+        }
+        this.type = types.modal
+        this.args = args
     }
 
 }
