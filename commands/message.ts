@@ -3,7 +3,7 @@ import {
     PermissionFlagsBits,
     SlashCommandBuilder
 } from "discord.js"
-
+import {message_sends} from "../modals/message_send"
 export class message extends Cmd{
 
     constructor() {
@@ -23,16 +23,18 @@ export class message extends Cmd{
                 .setDescription('Edit un message avec des data')
                 .addStringOption(option => option
                     .setName("messageId")
-                    .setDescription("L'id du message à éditer")))
+                    .setDescription("L'id du message à éditer")
+                    .setRequired(true)))
     }
 
     async customExe(inter, errors : Array<error>, customReply, args) : Promise<void> {
 
         switch(inter.options.getSubcommand()){
             case "send":
-                customReply.components = []
+                customReply.components = [new message_sends(["send"]).get()]
                 break
             case "edit":
+                customReply.components = [new message_sends(["edit", inter.options.getString("messageId")]).get()]
                 break
 
         }

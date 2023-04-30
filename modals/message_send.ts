@@ -1,29 +1,26 @@
-import {Menu} from "../menu";
-import {ActionRowBuilder, ModalBuilder, TextInputBuilder} from "discord.js";
+import {Modal} from "../menu";
+import {ActionRowBuilder, ModalActionRowComponentBuilder, ModalBuilder, TextInputBuilder, TextInputStyle} from "discord.js";
 
-class message_sends extends Menu{
+export class message_sends extends Modal{
 
     constructor(args) {
-
-        super(args)
+        super(args, "message_sends")
     }
 
-    public get(){
+    public menu(){
         const modal = new ModalBuilder()
             .setCustomId(this.id)
             .setTitle('Message Create/Edit')
 
-        const words = new ActionRowBuilder()
+        const data = new ActionRowBuilder<ModalActionRowComponentBuilder>()
             .setComponents(
                 new TextInputBuilder()
-                    .setCustomId('words')
+                    .setCustomId('data')
                     .setLabel('Ton nombre actuel de mots')
-                    .setRequired(false)
-                    .setMaxLength(6)
+                    .setStyle(TextInputStyle.Paragraph)
             )
 
-        // @ts-ignore
-        return modal.addComponents(words)
+        return modal.addComponents(data)
     }
 
 }
