@@ -11,9 +11,13 @@ module.exports = {
         const channelId = message.channel.id
         const author = message.author
         const id = author.id
-
+	
         if (!author.bot){
             const content = message.content
+	    
+	    if(content.includes("rawette")){
+		    message.reply("# RAWETTE")
+	    }
 
             //message.react(':champagne_glass:') //pour noel
             let r = Math.floor(Math.random() * (64 * 100 / config.weeklyPlumes))
