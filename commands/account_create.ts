@@ -1,4 +1,4 @@
-import {Cmd, error} from "../cmd"
+import {Inter, error} from "../Inter"
 import {
     CommandInteraction,
     PermissionFlagsBits,
@@ -7,7 +7,7 @@ import {
 import {Member} from "../dbObjects/Member"
 import {c} from "../config"
 
-export class account_create extends Cmd{
+export class account_create extends Inter{
 
     constructor() {
         super()

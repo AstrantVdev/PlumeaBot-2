@@ -1,11 +1,9 @@
-import {Inter} from "./cmd"
+import {Inter} from "./Inter"
 import {
     ButtonBuilder,
     ModalBuilder,
     ButtonStyle,
-    ActionRowBuilder,
-    TextInputBuilder,
-    ModalActionRowComponentBuilder
+    ActionRowBuilder
 } from "discord.js";
 
 export const types = {

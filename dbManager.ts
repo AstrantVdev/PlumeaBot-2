@@ -1,4 +1,4 @@
-import {Cmd} from "./cmd";
+import {Inter} from "./Inter";
 import {getAllFilesInDir} from "./util";
 import {Sequelize} from "sequelize";
 export let db
@@ -9,7 +9,7 @@ export class Tab {
     public defaultParameter : string
 
     constructor(id=null) {
-        if (this.constructor === Cmd) {
+        if (this.constructor === Inter) {
             throw new Error("Abstract classes can't be instantiated.")
         }
         this.tab.sync()

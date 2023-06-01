@@ -26,7 +26,7 @@ export class Inter {
     public userIds: [string]
 
     constructor() {
-        if (this.constructor === Cmd) {
+        if (this.constructor === Inter) {
             throw new Error("Abstract classes can't be instantiated.")
         }
 
@@ -255,18 +255,6 @@ export class Inter {
             .setDescription(`**Success** | ${inter.member.user} | <#${inter.channel.id}>`)
 
         mUtil.sendMes(c.channels.logs, {embeds: [embed], files: title.files})
-
-    }
-
-}
-
-export class Cmd extends Inter{
-
-    constructor() {
-        super()
-        if (this.constructor === Cmd) {
-            throw new Error("Abstract classes can't be instantiated.")
-        }
 
     }
 

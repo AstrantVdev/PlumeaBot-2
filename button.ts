@@ -1,4 +1,4 @@
-import {Inter} from "./cmd"
+import {Inter} from "./Inter"
 import {ButtonBuilder, ModalBuilder, ButtonStyle, ActionRowBuilder, TextInputBuilder} from "discord.js";
 export class Button extends Inter{
     public id : string

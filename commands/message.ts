@@ -1,10 +1,10 @@
-import {Cmd, error} from "../cmd"
+import {Inter, error} from "../Inter"
 import {
     PermissionFlagsBits,
     SlashCommandBuilder
 } from "discord.js"
 import {message_sends} from "../modals/message_send"
-export class message extends Cmd{
+export class message extends Inter{
 
     constructor() {
         super()
