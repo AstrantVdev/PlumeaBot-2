@@ -1,4 +1,4 @@
-import {Inter, error} from "../Inter"
+import {Inter, error} from "../interObjects/Inter"
 import {
     CommandInteraction,
     PermissionFlagsBits,

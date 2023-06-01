@@ -1,4 +1,4 @@
-import {Inter} from "./Inter"
+import {Inter} from "./interObjects/Inter"
 import {
     ButtonBuilder,
     ModalBuilder,

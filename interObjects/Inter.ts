@@ -3,26 +3,32 @@ import {
     CommandInteraction,
     ModalBuilder, ModalSubmitInteraction, SelectMenuInteraction
 } from "discord.js"
-const { c } = require("./config.js")
-import {getAllFilesInDir} from "./util"
-import {Menu} from "./menu"
+const { c } = require("../config")
+import {getAllFilesInDir} from "../util"
+import {Menu} from "../menu"
+import {error} from "./Error"
 
-export class error {
-    public errorId: any
-    public lvl: any
-    public customMes: any
 
-    constructor(errorId=null, lvl=0, customMes={ content: null, embeds: null, components: null }) {
-        this.errorId = errorId
-        this.lvl = lvl
-        this.customMes = customMes
-    }
 
-}
+/**
+ * Class to create and manage custom discord js interaction features
+ */
 export class Inter {
+    /**
+     * @property {[string]} channelIds ids of channels where interaction can be executed
+     */
     public channelIds: [string]
+    /**
+     * @property {[string]} categoryIds ids of categories where interaction can be executed
+     */
     public categoryIds: [string]
+    /**
+     * @property {[string]} rolesIds ids of roles which can execute the interaction
+     */
     public roleIds: [string]
+    /**
+     * @property {[string]} userIds ids of users which can execute the interaction
+     */
     public userIds: [string]
 
     constructor() {
@@ -32,10 +38,17 @@ export class Inter {
 
     }
 
+    /**
+     * @property {Function} get give the interaction builder
+     */
     public get() {
         throw new Error("Method 'get()' must be implemented.")
     }
 
+    /**
+     * execute interaction and manage errors
+     * @returns void
+     */
     public async exe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction) : Promise<void> {
         await inter.deferReply({ephemeral: true})
 
@@ -67,13 +80,21 @@ export class Inter {
 
     }
 
+    /**
+     * @property {Function} define custom features on interaction execution
+     * @returns void
+     */
     public customExe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction, errors : Array<error>, customReply, args) : void {
-        throw new Error("Method 'exe()' must be implemented.")
+        throw new Error("Method 'customExe()' must be implemented.")
     }
 
+    /**
+     * @property {Function} manage the interaction errors
+     * @returns void
+     */
     private sendErrors(inter, errors : Array<error>) : void {
-        const mUtil = require("./utils/message.js")
-        const { colors } = require('./utils/message.js')
+        const mUtil = require("../utils/message")
+        const { colors } = require('../utils/message')
 
         let lvl = 0
         let userMes = {
@@ -151,6 +172,10 @@ export class Inter {
 
     }
 
+    /**
+     * Function to define custom features on interaction execution
+     * @returns { files: [], content: @String }
+     */
     private chooseInterMessageTitle(inter){
         let title = { files: [], content: null }
         let options = []
@@ -209,8 +234,8 @@ export class Inter {
     }
 
     public success(inter, customReply=null, args = []) : void {
-        const mUtil = require("./utils/message.js")
-        const { colors } = require('./utils/message.js')
+        const mUtil = require("../utils/message")
+        const { colors } = require('../utils/message')
 
         switch(typeof customReply) {
             // @ts-ignore

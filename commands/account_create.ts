@@ -1,11 +1,11 @@
-import {Inter, error} from "../Inter"
+import {Inter} from "../interObjects/Inter"
 import {
-    CommandInteraction,
     PermissionFlagsBits,
     SlashCommandBuilder
 } from "discord.js"
 import {Member} from "../dbObjects/Member"
 import {c} from "../config"
+import {error} from "../interObjects/Error";
 
 export class account_create extends Inter{
 
