@@ -3,11 +3,11 @@ import {
     CommandInteraction,
     ModalBuilder, ModalSubmitInteraction, SelectMenuInteraction
 } from "discord.js"
-const { c } = require("../config")
+import {c} from "../config"
+
 import {getAllFilesInDir} from "../util"
 import {Menu} from "../menu"
 import {error} from "./Error"
-
 
 
 /**
@@ -38,15 +38,13 @@ export class Inter {
 
     }
 
-    /**
-     * @property {Function} get give the interaction builder
-     */
     public get() {
         throw new Error("Method 'get()' must be implemented.")
     }
 
     /**
      * execute interaction and manage errors
+     * @param {CommandInteraction | ButtonInteraction |ModalSubmitInteraction | SelectMenuInteraction} inter the base discord js interaction to be executed
      * @returns void
      */
     public async exe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction) : Promise<void> {
@@ -54,9 +52,9 @@ export class Inter {
 
         let errors : Array<error> = []
 
-        if(this.channelIds.includes(inter.channelId)) errors.push(c.errors.cmds.channel)
-        if(this.categoryIds.includes(inter.channel.parentId)) errors.push(c.errors.cmds.category)
-        if(this.userIds.includes(inter.user.id)) errors.push(c.errors.cmds.channel)
+        if(this.channelIds.includes(inter.channelId)) errors.push(new error(c.errors.cmds.channel, 0))
+        if(this.categoryIds.includes(inter.channel.parentId)) errors.push(new error(c.errors.cmds.category, 0))
+        if(this.userIds.includes(inter.user.id)) errors.push(new error(c.errors.cmds.channel, 0))
 
         let hasRole = false
         this.roleIds.some(r => {
@@ -84,7 +82,7 @@ export class Inter {
      * @property {Function} define custom features on interaction execution
      * @returns void
      */
-    public customExe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction, errors : Array<error>, customReply, args) : void {
+    public customExe(inter : CommandInteraction | ButtonInteraction | ModalSubmitInteraction | SelectMenuInteraction, errors : Array<string>, customReply, args) : void {
         throw new Error("Method 'customExe()' must be implemented.")
     }
 
