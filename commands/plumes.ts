@@ -1,9 +1,12 @@
+import { SlashCommandBuilder, PermissionFlagsBits } from "discord.js"
+import { InterError } from "../interObjects/InterError"
+import { Cmd } from "../interObjects/Cmd"
 
 
-export class plumes extends Inter{
-    
-    constructor() {
-        super()
+export class plumes extends Cmd{
+
+    public constructor(inter) {
+        super(inter)
     }
 
     /**
@@ -11,7 +14,7 @@ export class plumes extends Inter{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    get(){
+    public static get(){
         return new SlashCommandBuilder()
             .setName('plumes')
             .setDescription('Ajoute un nombre de plumes à un' + c.string.inhab + ', négatif ou positif, au choix')
@@ -32,7 +35,7 @@ export class plumes extends Inter{
 
     }
 
-    public async customExe(inter : CommandInteraction, errors : Array<InterError>, customReply, args) : Promise<void> {
+    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
         const user = inter.options.getMember('user')
         let p = inter.options.getInteger('plumes')
 

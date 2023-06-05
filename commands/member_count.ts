@@ -1,9 +1,12 @@
+import { SlashCommandBuilder } from "discord.js"
+import { InterError } from "../interObjects/InterError"
+import { Cmd } from "../interObjects/Cmd"
 
 
-export class member_count extends Inter{
-    
-    constructor() {
-        super()
+export class member_count extends Cmd{
+
+    public constructor(inter) {
+        super(inter)
     }
 
     /**
@@ -11,14 +14,14 @@ export class member_count extends Inter{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    get(){        
+    public static get(){
         return new SlashCommandBuilder()
             .setName('member_count')
             .setDescription('Donne le nombre de membres (bot exclu)')
 
     }
 
-    public async customExe(inter : CommandInteraction, errors : Array<InterError>, customReply, args) : Promise<void> {
+    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
         let count = inter.guild.memberCount
         count -= inter.guild.members.cache.filter(m => m.user.bot).size
 

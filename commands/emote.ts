@@ -1,9 +1,12 @@
+import { SlashCommandBuilder } from "discord.js"
+import { InterError } from "../interObjects/InterError"
+import { Cmd } from "../interObjects/Cmd"
 
 
-export class amote extends Inter{
-    
-    constructor() {
-        super()
+export class amote extends Cmd{
+
+    public constructor(inter) {
+        super(inter)
     }
 
     /**
@@ -11,14 +14,14 @@ export class amote extends Inter{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    get(){	
+    public static get(){
 		return new SlashCommandBuilder()
 			.setName('emote')
 			.setDescription('plume')
 
 	}
 
-    public async customExe(inter : CommandInteraction, errors : Array<InterError>, customReply, args) : Promise<void> {
+    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
 		await mes.interSuccess(inter, { content: c.emotes.plume, formatted: true, ephemeral: false })
 
 		/*

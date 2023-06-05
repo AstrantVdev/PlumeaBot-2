@@ -1,9 +1,12 @@
+import { SlashCommandBuilder } from "discord.js"
+import { InterError } from "../interObjects/InterError"
+import { Cmd } from "../interObjects/Cmd"
 
 
-export class sesame extends Inter{
-    
-    constructor() {
-        super()
+export class sesame extends Cmd{
+
+    public constructor(inter) {
+        super(inter)
     }
 
     /**
@@ -11,7 +14,7 @@ export class sesame extends Inter{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    get(){
+    public static get(){
         return new SlashCommandBuilder()
             .setName('sesame')
             .setDescription("Permet d'accéder au serveur")
@@ -22,7 +25,7 @@ export class sesame extends Inter{
 
     }
 
-    public async customExe(inter : CommandInteraction, errors : Array<InterError>, customReply, args) : Promise<void> {
+    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
         const pass = inter.options.getString('pass')
         const member = inter.member
         const plumeRole = c.roles.plumeen

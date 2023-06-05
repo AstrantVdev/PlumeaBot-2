@@ -1,9 +1,12 @@
+import { SlashCommandBuilder, PermissionFlagsBits } from "discord.js"
+import { InterError } from "../interObjects/InterError"
+import { Cmd } from "../interObjects/Cmd"
 
 
-export class clear extends Inter{
-    
-    constructor() {
-        super()
+export class clear extends Cmd{
+
+    public constructor(inter) {
+        super(inter)
     }
 
     /**
@@ -11,7 +14,7 @@ export class clear extends Inter{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    get(){
+    public static get(){
         return new SlashCommandBuilder()
             .setName('clear')
             .setDescription('Atomise tout les messages du salon')
@@ -29,7 +32,7 @@ export class clear extends Inter{
 
     }
 
-    public async customExe(inter : CommandInteraction, errors : Array<InterError>, customReply, args) : Promise<void> {
+    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
         let n = 100
         const m = inter.options.getInteger('clear_intensity')
         if(m) n = m

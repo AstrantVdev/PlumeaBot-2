@@ -1,4 +1,3 @@
-import {Inter} from "../interObjects/Inter"
 import {
     CommandInteraction,
     PermissionFlagsBits,
@@ -7,14 +6,15 @@ import {
 import {Member} from "../dbObjects/Member"
 import {c} from "../config"
 import { InterError } from "../interObjects/InterError"
+import { Cmd } from "../interObjects/Cmd"
 
 /**
  * spam a certain number of chad gif, because u know... chad supremacy etc...
  */
-export class account_create extends Inter{
+export class account_create extends Cmd{
 
-    constructor() {
-        super()
+    public constructor(inter) {
+        super(inter)
     }
 
     /**
@@ -22,7 +22,7 @@ export class account_create extends Inter{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    get(){
+    public static get(){
         return new SlashCommandBuilder()
             .setName('account-create')
             .setDescription('Crée un compte pour un utilisateur')
@@ -34,8 +34,8 @@ export class account_create extends Inter{
 
     }
 
-    public async customExe(inter : CommandInteraction, errors : Array<InterError>, customReply, args) : Promise<void> {
-        const userId = inter.options.getUser('user').id
+    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
+        const userId = this.inter.options.getUser('user').id
         const m = new Member(userId)
 
         if(!await m.exists()){

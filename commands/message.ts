@@ -1,16 +1,18 @@
-import {Inter, error} from "../interObjects/Inter"
 import {
     PermissionFlagsBits,
     SlashCommandBuilder
 } from "discord.js"
 import {message_sends} from "../modals/message_send"
-export class message extends Inter{
+import { Cmd } from "../interObjects/Cmd"
+import { InterError } from "../interObjects/InterError"
 
-    constructor() {
-        super()
+export class message extends Cmd{
+
+    public constructor(inter) {
+        super(inter)
     }
 
-    get(){
+    public static get(){
         return new SlashCommandBuilder()
             .setName('account-create')
             .setDescription('Crée un compte pour un utilisateur')
@@ -27,14 +29,14 @@ export class message extends Inter{
                     .setRequired(true)))
     }
 
-    async customExe(inter, errors : Array<error>, customReply, args) : Promise<void> {
+    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
 
-        switch(inter.options.getSubcommand()){
+        switch(this.inter.options.getSubcommand()){
             case "send":
                 customReply.components = [new message_sends(["send"]).get()]
                 break
             case "edit":
-                customReply.components = [new message_sends(["edit", inter.options.getString("messageId")]).get()]
+                customReply.components = [new message_sends(["edit", this.inter.options.getString("messageId")]).get()]
                 break
 
         }

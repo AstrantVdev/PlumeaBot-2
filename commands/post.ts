@@ -1,9 +1,12 @@
+import { SlashCommandBuilder } from "discord.js"
+import { InterError } from "../interObjects/InterError"
+import { Cmd } from "../interObjects/Cmd"
 
 
-export class post extends Inter{
-    
-    constructor() {
-        super()
+export class post extends Cmd{
+
+    public constructor(inter) {
+        super(inter)
     }
 
     /**
@@ -11,7 +14,7 @@ export class post extends Inter{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    get(){
+    public static get(){
         return new SlashCommandBuilder()
         .setName('post')
         .setDescription('Permet de poster votre texte')
@@ -22,7 +25,7 @@ export class post extends Inter{
 
     }
 
-    public async customExe(inter : CommandInteraction, errors : Array<InterError>, customReply, args) : Promise<void> {
+    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
         let file = inter.options.getAttachment("fichier")
         const user = inter.member.user
         const id = user.id

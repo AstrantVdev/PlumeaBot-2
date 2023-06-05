@@ -1,9 +1,12 @@
+import { SlashCommandBuilder } from "discord.js"
+import { InterError } from "../interObjects/InterError"
+import { Cmd } from "../interObjects/Cmd"
 
 
-export class random extends Inter{
-    
-    constructor() {
-        super()
+export class random extends Cmd{
+
+    public constructor(inter) {
+        super(inter)
     }
 
     /**
@@ -11,7 +14,7 @@ export class random extends Inter{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    get(){
+    public static get(){
         return new SlashCommandBuilder()
             .setName('random')
             .setDescription('Donne un nombre au hasard')
@@ -24,7 +27,7 @@ export class random extends Inter{
 
     }
 
-    public async customExe(inter : CommandInteraction, errors : Array<InterError>, customReply, args) : Promise<void> {
+    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
         let n = inter.options.getInteger('faces')
         const r = Math.floor(Math.random() * (n + 1))
 

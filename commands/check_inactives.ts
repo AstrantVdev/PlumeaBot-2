@@ -1,12 +1,15 @@
-import { CommandInteraction, PermissionFlagsBits, SlashCommandBuilder } from "discord.js"
-import { Inter } from "../interObjects/Inter"
+import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js"
 import { InterError } from "../interObjects/InterError"
+import { Member } from "../dbObjects/Member"
+import { Cmd } from "../interObjects/Cmd"
 
+/**
+ * send a list of inactive members
+ */
+export class check_inactives extends Cmd{
 
-export class check_inactives extends Inter{
-    
-    constructor() {
-        super()
+    public constructor(inter) {
+        super(inter)
     }
 
     /**
@@ -14,7 +17,7 @@ export class check_inactives extends Inter{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    get(){
+    public static get(){
         return new SlashCommandBuilder()
             .setName('check-inactives')
             .setDescription('Renvoie une liste des membres sans point et présents depuis au moins un mois')
@@ -22,21 +25,22 @@ export class check_inactives extends Inter{
 
     }
 
-    public async customExe(inter : CommandInteraction, errors : Array<InterError>, customReply, args) : Promise<void> {
-        let inactivesIds = await mUtil.getInactivesIds()
+    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
+        let inactivesIds = await Member.getInactivesIds()
 
         if(inactivesIds.length > 0){
-            const menu = await require("../selectMenus/inactivesCheck").get(inactivesIds, inter)
+            const menu = await require("../selectMenus/inactivesCheck").get(inactivesIds, this.inter)
 
             if(menu){
-                await mes.interSuccess(inter, { content: "ca dégage", components: menu })
+                await mes.interSuccess({ content: "ca dégage", components: menu })
                 return
             }
 
 
         }
 
-        await mes.interSuccess(inter, "Il n'en reste aucun mouhahaha !")
+        errors.push()
+        await mes.interSuccess("Il n'en reste aucun mouhahaha !")
 
     }
 

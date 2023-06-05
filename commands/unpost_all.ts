@@ -1,9 +1,12 @@
+import { SlashCommandBuilder, PermissionsBitField } from "discord.js"
+import { InterError } from "../interObjects/InterError"
+import { Cmd } from "../interObjects/Cmd"
 
 
-export class unpost_all extends Inter{
-    
-    constructor() {
-        super()
+export class unpost_all extends Cmd{
+
+    public constructor(inter) {
+        super(inter)
     }
 
     /**
@@ -11,7 +14,7 @@ export class unpost_all extends Inter{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    get(){
+    public static get(){
         return new SlashCommandBuilder()
             .setName('unpost-all')
             .setDescription("Enlève TOUS LES POSTS d'un utilisateur, pas les commentaire")
@@ -26,7 +29,7 @@ export class unpost_all extends Inter{
 
     }
 
-    public async customExe(inter : CommandInteraction, errors : Array<InterError>, customReply, args) : Promise<void> {
+    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
         const user = inter.user
         let userId = user.id
 

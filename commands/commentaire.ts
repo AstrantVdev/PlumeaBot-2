@@ -1,8 +1,13 @@
+import { SlashCommandBuilder, ActionRowBuilder } from "discord.js"
+import { client } from ".."
+import { InterError } from "../interObjects/InterError"
+import { Cmd } from "../interObjects/Cmd"
 
-export class commentaire extends Inter{
-    
-    constructor() {
-        super()
+
+export class commentaire extends Cmd{
+
+    public constructor(inter) {
+        super(inter)
     }
 
     /**
@@ -10,14 +15,14 @@ export class commentaire extends Inter{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    get(){        
+    public static get(){
         return new SlashCommandBuilder()
             .setName('commentaire')
             .setDescription('Offffficialiiiise un commentaire')
 
     }
 
-    public async customExe(inter : CommandInteraction, errors : Array<InterError>, customReply, args) : Promise<void> {
+    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
         const postId = inter.channel.id
         const textUUID = await tUtils.getTextUUIDByPostId(postId)
         const member = inter.member

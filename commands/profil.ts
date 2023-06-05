@@ -1,9 +1,12 @@
+import { SlashCommandBuilder } from "discord.js"
+import { InterError } from "../interObjects/InterError"
+import { Cmd } from "../interObjects/Cmd"
 
 
-export class profil extends Inter{
-    
-    constructor() {
-        super()
+export class profil extends Cmd{
+
+    public constructor(inter) {
+        super(inter)
     }
 
     /**
@@ -11,7 +14,7 @@ export class profil extends Inter{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    get(){
+    public static get(){
 		return new SlashCommandBuilder()
 			.setName('profil')
 			.setDescription('Profil d~un pluméen')
@@ -22,7 +25,7 @@ export class profil extends Inter{
 
 	}
 
-    public async customExe(inter : CommandInteraction, errors : Array<InterError>, customReply, args) : Promise<void> {
+    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
 		const member = inter.options.getMember('user')
 		const id = member.id
 

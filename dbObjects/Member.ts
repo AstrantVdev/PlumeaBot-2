@@ -60,7 +60,7 @@ export class Member extends Tab{
         })
     }
 
-    async getInactivesIds(){
+    static async getInactivesIds(){
         const today = new Date()
         const limit = today.setDate(today.getDate() - 32)
 
