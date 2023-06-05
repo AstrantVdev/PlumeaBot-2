@@ -1,4 +1,4 @@
-import {Inter, error} from "../interObjects/Inter"
+import {Inter} from "../interObjects/Inter"
 import {
     CommandInteraction,
     PermissionFlagsBits,
@@ -6,6 +6,7 @@ import {
 } from "discord.js"
 import {Member} from "../dbObjects/Member"
 import {c} from "../config"
+import { InterError } from "../interObjects/InterError"
 
 export class account_create extends Inter{
 
@@ -13,6 +14,11 @@ export class account_create extends Inter{
         super()
     }
 
+    /**
+     * where is defined the cmd
+     * 
+     * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
+     */
     get(){
         return new SlashCommandBuilder()
             .setName('account-create')
@@ -25,7 +31,7 @@ export class account_create extends Inter{
 
     }
 
-    async customExe(inter : CommandInteraction, errors : Array<error>, customReply, args) : Promise<void> {
+    async customExe(inter : CommandInteraction, errors : Array<InterError>, customReply, args) : Promise<void> {
         const userId = inter.options.getUser('user').id
         const m = new Member(userId)
 
@@ -33,7 +39,7 @@ export class account_create extends Inter{
             await m.addOne()
 
         }else{
-            errors.push(new error(c.errors.cmds.accountCreate.userExist))
+            errors.push(new InterError(c.errors.cmds.accountCreate.userExist))
         }
 
     }

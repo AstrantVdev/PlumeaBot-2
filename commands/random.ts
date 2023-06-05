@@ -1,41 +1,35 @@
-import {Inter, error} from "../interObjects/Inter"
-import {
-    CommandInteraction,
-    PermissionFlagsBits,
-    SlashCommandBuilder
-} from "discord.js"
-import {Member} from "../dbObjects/Member"
-import {c} from "../config"
 
-export class account_create extends Inter{
 
+export class random extends Inter{
+    
     constructor() {
         super()
     }
 
+    /**
+     * where is defined the cmd
+     * 
+     * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
+     */
     get(){
         return new SlashCommandBuilder()
-            .setName('account-create')
-            .setDescription('Crée un compte pour un utilisateur')
-            .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-            .addUserOption(option => option
-                .setName('user')
-                .setDescription('Utilisateur')
+            .setName('random')
+            .setDescription('Donne un nombre au hasard')
+            .addIntegerOption(option => option
+                .setMinValue(1)
+                .setMaxValue(100)
+                .setName('faces')
+                .setDescription('Nombre de faces du dé virtuel (1-100')
                 .setRequired(true))
 
     }
 
-    async customExe(inter : CommandInteraction, errors : Array<error>, customReply, args) : Promise<void> {
-        const userId = inter.options.getUser('user').id
-        const m = new Member(userId)
+    public async customExe(inter : CommandInteraction, errors : Array<InterError>, customReply, args) : Promise<void> {
+        let n = inter.options.getInteger('faces')
+        const r = Math.floor(Math.random() * (n + 1))
 
-        if(!await m.exists()){
-            await m.addOne()
+        await mes.interSuccess(inter, {content: `||     ${r}     || sur ${n} !\n^^`, ephemeral : true})
 
-        }else{
-            errors.push(new error(c.errors.cmds.accountCreate.userExist))
-        }
-
-    }
+	}
 
 }

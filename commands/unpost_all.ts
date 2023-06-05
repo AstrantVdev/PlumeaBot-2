@@ -1,39 +1,66 @@
-import {Inter, error} from "../interObjects/Inter"
-import {
-    CommandInteraction,
-    PermissionFlagsBits,
-    SlashCommandBuilder
-} from "discord.js"
-import {Member} from "../dbObjects/Member"
-import {c} from "../config"
 
-export class account_create extends Inter{
 
+export class unpost_all extends Inter{
+    
     constructor() {
         super()
     }
 
+    /**
+     * where is defined the cmd
+     * 
+     * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
+     */
     get(){
         return new SlashCommandBuilder()
-            .setName('account-create')
-            .setDescription('Crée un compte pour un utilisateur')
-            .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+            .setName('unpost-all')
+            .setDescription("Enlève TOUS LES POSTS d'un utilisateur, pas les commentaire")
             .addUserOption(option => option
-                .setName('user')
-                .setDescription('Utilisateur')
-                .setRequired(true))
+                .setName("user")
+                .setDescription("L'utilisateur qui va perdre tout ses textes postés"))
+            .addStringOption(option => option
+                .setName("id_title")
+                .setDescription("L'id du texte ex : MANIKA")
+                .setMinLength(6)
+                .setMaxLength(6))
 
     }
 
-    async customExe(inter : CommandInteraction, errors : Array<error>, customReply, args) : Promise<void> {
-        const userId = inter.options.getUser('user').id
-        const m = new Member(userId)
+    public async customExe(inter : CommandInteraction, errors : Array<InterError>, customReply, args) : Promise<void> {
+        const user = inter.user
+        let userId = user.id
 
-        if(!await m.exists()){
-            await m.addOne()
+        try{
+            userId = inter.options.getUser("user").id
+
+            if(!user.permissions.has(PermissionsBitField.Administrator)){
+                await mes.interError(inter, "Il faut être admin pour spécifier l'utilisateur ! Ne spécifie aucun paramètre pour que la commande agisse sur ton compte ;")
+
+            }
+        }catch(e){}
+
+        let where = { authorId: userId }
+
+        try{
+            where.id_text_title = inter.options.getString("id_title")
+
+        }catch(e){}
+
+        const textsUUIDs = await T_TAB.findOne({ where: where, attributes: ['textsUUIDs'], raw: true })
+
+        if(textsUUIDs.length !== 0){
+
+            await textsUUIDs.forEach(async uuid => {
+                await t.vanish(uuid)
+            })
+
+            await m.removeAllTextsUUIDs(userId)
+
+            await mes.interSuccess(inter)
 
         }else{
-            errors.push(new error(c.errors.cmds.accountCreate.userExist))
+            await mes.interError(inter, "Aucun texte trouvé, l'id_title est peut-etre erroné")
+
         }
 
     }

@@ -5,15 +5,23 @@ import {
 } from "discord.js"
 import {Member} from "../dbObjects/Member"
 import {c} from "../config"
-import {error} from "../interObjects/Error";
+import {InterError} from "../interObjects/InterError";
 
+/**
+ * create an account to the discord user inside databse if he haven't yet
+ */
 export class account_create extends Inter{
 
-    constructor() {
+    public constructor() {
         super()
     }
 
-    get(){
+    /**
+     * where is defined the cmd
+     * 
+     * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
+     */
+    public get(){
         return new SlashCommandBuilder()
             .setName('account-create')
             .setDescription('Crée un compte pour un utilisateur')
@@ -25,7 +33,7 @@ export class account_create extends Inter{
 
     }
 
-    async customExe(inter, errors : Array<error>, customReply, args) : Promise<void> {
+    public async customExe(inter, errors : Array<InterError>, customReply, args) : Promise<void> {
         const userId = inter.options.getUser('user').id
         const m = new Member(userId)
 
@@ -33,7 +41,7 @@ export class account_create extends Inter{
             await m.addOne()
 
         }else{
-            errors.push(new error(c.errors.cmds.accountCreate.userExist))
+            errors.push(new InterError(c.errors.cmds.accountCreate.userExist))
         }
 
     }

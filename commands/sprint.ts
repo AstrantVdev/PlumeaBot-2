@@ -1,41 +1,51 @@
-import {Inter, error} from "../interObjects/Inter"
-import {
-    CommandInteraction,
-    PermissionFlagsBits,
-    SlashCommandBuilder
-} from "discord.js"
-import {Member} from "../dbObjects/Member"
-import {c} from "../config"
 
-export class account_create extends Inter{
 
+export class sprint extends Inter{
+    
     constructor() {
         super()
     }
 
+    /**
+     * where is defined the cmd
+     * 
+     * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
+     */
     get(){
         return new SlashCommandBuilder()
-            .setName('account-create')
-            .setDescription('Crée un compte pour un utilisateur')
-            .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-            .addUserOption(option => option
-                .setName('user')
-                .setDescription('Utilisateur')
-                .setRequired(true))
+        .setName('sprint')
+        .setDescription('Bah Sprint... O.o')
 
     }
 
-    async customExe(inter : CommandInteraction, errors : Array<error>, customReply, args) : Promise<void> {
-        const userId = inter.options.getUser('user').id
-        const m = new Member(userId)
+    public async customExe(inter : CommandInteraction, errors : Array<InterError>, customReply, args) : Promise<void> {
+        const channelId = inter.channel.id
 
-        if(!await m.exists()){
-            await m.addOne()
+        if(await sUtils.isChannel(channelId)){
+
+            await mes.interSuccess(inter, require("../modals/sprintBegin").get())
+
+
+            /*
+
+            if(! await sUtils.isSprinting(0)){
+                await mes.interSuccess(inter, require("../modals/sprintBegin").get())
+
+            }else{
+                const message = await mes.getMes(config.channels.sprint, await sUtils.getMessageId(0))
+                await mes.interSuccess(
+                    inter,
+                    {
+                        content: "Un sprint est déjà en cours, rejoins le :",
+                        components: [require("../buttons/link").get(message.url)]
+                    })
+            }
+            */
 
         }else{
-            errors.push(new error(c.errors.cmds.accountCreate.userExist))
+            await mes.interError(inter,'Mauvais salon, va dans <#' + c.channels.sprint + ">")
         }
-
+    
     }
 
 }
