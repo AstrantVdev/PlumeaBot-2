@@ -1,6 +1,7 @@
 import { SlashCommandBuilder, PermissionFlagsBits } from "discord.js"
 import { InterError } from "../interObjects/InterError"
 import { Cmd } from "../interObjects/Cmd"
+import { delMessagesBeforeOne } from "../utils/message"
 
 
 export class clear extends Cmd{
@@ -27,30 +28,34 @@ export class clear extends Cmd{
                 .setName('clear_intensity')
                 .setDescription('Nombre de messages à effacer'))
             .addBooleanOption(option =>  option
-                .setName('safe')
+                .setName('logged')
                 .setDescription('Permet de log les messages effacer'))
 
     }
 
     public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
+        // set number of messages to be deleted
         let n = 100
-        const m = inter.options.getInteger('clear_intensity')
+        const m = this.inter.options.getInteger('clear_intensity')
         if(m) n = m
 
-        let safe = false
-        const b = inter.options.getBoolean('safe')
-        if(b) safe = b
+        // set if messages will be logged or not
+        let logged = false
+        const b = this.inter.options.getBoolean('logged')
+        if(b) logged = b
 
+        // n messages before this one will be deleted
         let mesId = 0
-        const mesOption = inter.options.getInteger('message_id')
+        const mesOption = this.inter.options.getInteger('message_id')
         if(mesOption) mesId = mesOption
 
-        const deleteMes = await mes.delMessagesBeforeOne(inter.channel, mesId, n, safe)
+        const worked = await delMessagesBeforeOne(this.inter.channel, mesId, n, logged)
 
-        if(deleteMes){
-            await mes.interSuccess(inter)
+        if(worked){
+            await mes.interSuccess(this.inter)
         }else{
-            await mes.interError(inter,"pas de messages dans ce channel !")
+            errors.push()
+            await mes.interError(this.inter,c.errors.cmds.)
         }
 
     }

@@ -237,7 +237,6 @@ export abstract class Inter {
                 ]
             })
 
-        //if it is a string, this is a path to the interaction success message in json config
         }else if(typeof customReply == "string"){
             this.inter.editReply({
                 embeds: [
@@ -251,7 +250,7 @@ export abstract class Inter {
             this.inter.editReply({
                 embeds: [
                     mUtil.newEmbed(colors.green)
-                        .setDescription(`**Action accomplie avec succès ! :D**`)
+                        .setDescription(c.success.cmds.default)
                 ]
             })
 

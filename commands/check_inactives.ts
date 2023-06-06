@@ -2,6 +2,7 @@ import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js"
 import { InterError } from "../interObjects/InterError"
 import { Member } from "../dbObjects/Member"
 import { Cmd } from "../interObjects/Cmd"
+import { c } from "../config"
 
 /**
  * send a list of inactive members
@@ -32,15 +33,13 @@ export class check_inactives extends Cmd{
             const menu = await require("../selectMenus/inactivesCheck").get(inactivesIds, this.inter)
 
             if(menu){
-                await mes.interSuccess({ content: "ca dégage", components: menu })
+                await mes.interSuccess({ content: c.success.cmds.check_inactives.some_inactives, components: menu })
                 return
             }
 
-
         }
 
-        errors.push()
-        await mes.interSuccess("Il n'en reste aucun mouhahaha !")
+        customReply.content = c.success.cmds.check_inactives.any_inactives
 
     }
 

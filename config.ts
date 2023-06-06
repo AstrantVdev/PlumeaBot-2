@@ -10,12 +10,17 @@ export const c =
                 accountCreate: {
                     userExist: "Cet utilisateur existe déjà !"
                 }
+                
             }
         },
 
         success:{
             cmds:{
                 default: '**Action accomplie avec succès ! :D**',
+                check_inactives: {
+                    any_inactives: "Aucun inactifs restant !",
+                    some_inactives: "ca dégage"
+                }
             }
         },
 

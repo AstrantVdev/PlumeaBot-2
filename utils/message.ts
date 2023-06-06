@@ -1,5 +1,3 @@
-import {EmbedBuilder} from "discord.js";
-
 const { c } = require('../config')
 const {ActionRowBuilder, ButtonBuilder} = require("discord.js");
 import {client} from "../index"
