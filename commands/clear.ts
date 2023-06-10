@@ -2,6 +2,7 @@ import { SlashCommandBuilder, PermissionFlagsBits } from "discord.js"
 import { InterError } from "../interObjects/InterError"
 import { Cmd } from "../interObjects/Cmd"
 import { delMessagesBeforeOne } from "../utils/message"
+import { c } from "../config"
 
 
 export class clear extends Cmd{
@@ -51,11 +52,8 @@ export class clear extends Cmd{
 
         const worked = await delMessagesBeforeOne(this.inter.channel, mesId, n, logged)
 
-        if(worked){
-            await mes.interSuccess(this.inter)
-        }else{
-            errors.push()
-            await mes.interError(this.inter,c.errors.cmds.)
+        if(! worked){
+            errors.push(new InterError(c.errors.cmds.clear.no_message))
         }
 
     }

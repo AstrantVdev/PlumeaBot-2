@@ -2,9 +2,20 @@
 import {Tab, db} from "../dbManager"
 import {DataTypes, Op} from "sequelize"
 
-export class Texts extends Tab{
+/**
+ * text object from an author
+ */
+export class Text extends Tab{
 
-    constructor(id=null) {
+    /**
+     * 
+     * @param id the text uuid
+     * @param postId the text unique forum channel on the discord server
+     */
+    constructor(id, postId=null) {
+        if(postId){
+            this.get
+        }
         super(id)
     }
 

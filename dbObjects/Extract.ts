@@ -164,11 +164,11 @@ export class Extract extends Tab{
         return this.getAtr('protected')
     }
 
-    async getextractMesId(){
+    async getMesId(){
         return this.getAtr('extractMesId')
     }
 
-    async setextractMesId(extractMesId){
+    async setMesId(extractMesId){
         await this.setAtr('extractMesId', extractMesId)
     }
 
@@ -257,7 +257,7 @@ export class Extract extends Tab{
             .setDescription(desc)
     }
 
-    async getSimilarextractUUID(id_extract_title, id, uuid){
+    async getSimilarExtractUUID(id_extract_title, id, uuid){
         const serie = await this.tab.findAll({
             where: {'id_extract_title': id_extract_title, 'authorId': id, 'id': { [Op.not]: uuid }},
             attributes: ['id', 'chap1', 'chap2'],
@@ -287,7 +287,7 @@ export class Extract extends Tab{
 
     }
 
-    async getextractUUIthisyPostId(postId){
+    async getIdByPostId(postId){
         const uuid = await this.tab.findOne({
             where: { postId: postId },
             attributes: ['id'],

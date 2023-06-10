@@ -1,7 +1,7 @@
 import {Tab, db} from "../dbManager";
 import {DataTypes} from "sequelize";
 
-export class Sprinters extends Tab{
+export class Sprinter extends Tab{
 
     constructor(id=null) {
         super(id)

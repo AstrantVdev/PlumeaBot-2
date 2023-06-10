@@ -6,13 +6,16 @@ import {
     ChannelSelectMenuInteraction,
     UserSelectMenuInteraction,
     RoleSelectMenuInteraction,
-    MentionableSelectMenuInteraction
+    MentionableSelectMenuInteraction,
+    Message,
+    BaseMessageOptions
 } from "discord.js"
 import {c} from "../config"
 
 import {getAllFilesInDir} from "../util"
 import {Menu} from "../menu"
 import {InterError} from "./InterError"
+import { ArrayParameter } from "postgres"
 
 type DiscordInter = ChatInputCommandInteraction | ButtonInteraction | ModalSubmitInteraction | 
 StringSelectMenuInteraction | ChannelSelectMenuInteraction | UserSelectMenuInteraction | RoleSelectMenuInteraction | MentionableSelectMenuInteraction
@@ -73,8 +76,8 @@ export abstract class Inter {
        })
        if(!hasRole && this.userIds.includes(this.inter.user.id)) errors.push(new InterError(c.errors.cmds.user))
 
-       let customReply: any //reply adressed to user from config and filed with variables, bould be message, forms etc...
-       let resultArgs: Array<ResultArg>= [] //list of variables that will fill success message
+       let customReply: string | any //reply adressed to user from config and filed with variables, bould be message, forms etc...
+       let resultArgs: Array<InterExeValue>= [] //list of variables that will fill success message
        this.customExe(errors, customReply, resultArgs)
 
        if(! errors){
@@ -92,7 +95,7 @@ export abstract class Inter {
      * @param customReply reply adressed to user if inter succeed
      * @param args list of variables and their keys to be parsed inside user and log message
      */
-    public abstract customExe(errors : Array<InterError>, customReply, args): void
+    public abstract customExe(errors : Array<InterError>, customReply: string | any, args: Array<InterExeValue>): void
 
     /**
      * log errors and send them to user inside a unique message using special format depending of their Id, customMessage and level
@@ -111,7 +114,7 @@ export abstract class Inter {
             components: null
         }
 
-        //interate all errors
+        //iterate all errors
         errors.forEach( er => {
             //choose higher error level
             if (er.lvl > lvl) lvl = er.lvl
@@ -204,7 +207,7 @@ export abstract class Inter {
      * 
      * @returns success message with filled with variables
      */
-    private getSuccessMes(key: string, args: Array<ResultArg>): string{
+    private getSuccessMes(key: string, args: Array<InterExeValue>): string{
         let mes = require("./newConfig.js").c.success.cmds[key]
 
         args.forEach(arg => {
@@ -220,7 +223,7 @@ export abstract class Inter {
      * @param customReply reply gived inside customExe function to be sent to user
      * @param args list of variables gived inside customExe to full customReply or not
      */
-    public success(customReply: any, args: Array<ResultArg>): void {
+    public success(customReply: string | any, args: Array<InterExeValue>): void {
         const mUtil = require("../utils/message")
         const { colors } = require('../utils/message')
 
@@ -260,6 +263,7 @@ export abstract class Inter {
                 customReply.embeds = [ mUtil.newEmbed(colors.green).setDescription(customReply.content) ]
                 customReply.content = null
             }
+            let test : BaseMessageOptions
             //with this customReply is ephemeral by default
             if (customReply.ephemeral == undefined) customReply.ephemeral = true
 
@@ -281,9 +285,9 @@ export abstract class Inter {
 }
 
 /**
- * arg created in command's execution which fill success message
+ * litteraly interaction execution value, arg created in command's execution which will fill final message
  */
-export class ResultArg {
+export class InterExeValue {
     public arg: string
     public key: string
 

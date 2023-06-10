@@ -1,6 +1,14 @@
 const { c } = require('../config')
 const {ActionRowBuilder, ButtonBuilder} = require("discord.js");
+import { BaseMessageOptions } from "discord.js";
 import {client} from "../index"
+
+/**
+ * 
+ */
+export class CustomMessage implements BaseMessageOptions{
+
+}
 
 
 export const colors= {

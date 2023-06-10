@@ -9,6 +9,9 @@ export const c =
                 role: 'Interaction réservée aux roles:\n #uwu',
                 accountCreate: {
                     userExist: "Cet utilisateur existe déjà !"
+                },
+                clear: {
+                    no_message: "Il n'y a pas de massges dans ce channel"
                 }
                 
             }

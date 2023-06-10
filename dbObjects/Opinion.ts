@@ -1,10 +1,10 @@
 import {Tab, db} from "../dbManager"
 import {DataTypes} from "sequelize"
-import {parameter, ParametersIds} from "./ParametersIds"
+import {parameter, ParameterId} from "./ParameterId"
 import {client} from "../index"
 import {newEmbed, sendMes} from "../utils/message"
 import{c} from "../config"
-export  class Opinions extends Tab{
+export  class Opinion extends Tab{
 
     constructor(id=null) {
         super(id)
@@ -48,12 +48,12 @@ export  class Opinions extends Tab{
         require('../utils/leaderboard.js').edit()
 
         const counter = await client.channels.fetch(c.channels.counter)
-        await new ParametersIds(parameter.plumesTotal).incrementAtr(null, p)
+        await new ParameterId(parameter.plumesTotal).incrementAtr(null, p)
 
-        await new ParametersIds(parameter.weeklyPlumes).incrementAtr("paramId", p)
+        await new ParameterId(parameter.weeklyPlumes).incrementAtr("paramId", p)
         require("../config").c.weeklyWords += p
 
-        counter.setName("PLUMES : " + await new ParametersIds(parameter.plumesTotal).incrementAtr("paramId", p))
+        counter.setName("PLUMES : " + await new ParameterId(parameter.plumesTotal).incrementAtr("paramId", p))
 
         return await sendMes(c.channels.plumes, { embeds: [embed] })
 

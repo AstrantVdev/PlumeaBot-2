@@ -1,7 +1,7 @@
 import {DataTypes} from "sequelize";
 import {Tab, db} from "../dbManager";
 
-export class ParametersDates extends Tab{
+export class ParameterDate extends Tab{
 
     constructor(id=null) {
         super(id)
