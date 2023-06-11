@@ -10,7 +10,7 @@ export  class Opinion extends Tab{
         super(id)
     }
 
-    tab = db.define('opinions', {
+    getTab = db.define('opinions', {
         id: {
             type: DataTypes.UUID,
             primaryKey: true,
@@ -60,7 +60,7 @@ export  class Opinion extends Tab{
     }
 
     memberOpinionExist(textUUID, id){
-        return this.tab.count({ where: { textId: textUUID, senderId: id } })
+        return this.getTab.count({ where: { textId: textUUID, senderId: id } })
             .then(count => {
                 return count !== 0
 

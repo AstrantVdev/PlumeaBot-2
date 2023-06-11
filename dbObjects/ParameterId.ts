@@ -7,7 +7,7 @@ export class ParameterId extends Tab{
         super(id)
     }
 
-    tab = db.define('parametersIds', {
+    getTab = db.define('parametersIds', {
         id: {
             type: DataTypes.STRING,
             primaryKey: true,

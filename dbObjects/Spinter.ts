@@ -7,7 +7,7 @@ export class Sprinter extends Tab{
         super(id)
     }
 
-    tab = db.define('sprinters', {
+    getTab = db.define('sprinters', {
         userId: DataTypes.STRING,
         sprint: DataTypes.UUID,
         join: DataTypes.DATE

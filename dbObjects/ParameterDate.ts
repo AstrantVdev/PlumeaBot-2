@@ -7,7 +7,7 @@ export class ParameterDate extends Tab{
         super(id)
     }
 
-    tab = db.define('parametersDates', {
+    getTab = db.define('parametersDates', {
         id: {
             type: DataTypes.STRING,
             primaryKey: true,

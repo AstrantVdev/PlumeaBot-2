@@ -5,13 +5,23 @@ import {c} from "../config"
 import {client} from "../index";
 import {Member} from "./Member";
 
+/**
+ * an extract link to a text and containing some chapters
+ */
 export class Extract extends Tab{
 
+    /**
+     * 
+     * @param id extract uuid
+     */
     constructor(id=null) {
         super(id)
     }
 
-    tab = db.define('extracts', {
+    /**
+     * database extracts tab
+     */
+    public static tab = db.define('extracts', {
         id: {
             type: DataTypes.UUID,
             primaryKey: true,
@@ -67,6 +77,10 @@ export class Extract extends Tab{
 
     })
 
+    /**
+     * 
+     * @param extract create an extract inside database tab
+     */
     async add(extract) {
         await this.create(extract)
     }
@@ -225,7 +239,7 @@ export class Extract extends Tab{
     }
 
     async removeExtractMes(){
-        await mes.delMes(c.channels.text, await this.getextractMesId())
+        await mes.delMes(c.channels.text, await this.getMesId())
     }
 
     async removeFileMes(){
@@ -258,7 +272,7 @@ export class Extract extends Tab{
     }
 
     async getSimilarExtractUUID(id_extract_title, id, uuid){
-        const serie = await this.tab.findAll({
+        const serie = await this.getTab.findAll({
             where: {'id_extract_title': id_extract_title, 'authorId': id, 'id': { [Op.not]: uuid }},
             attributes: ['id', 'chap1', 'chap2'],
             raw: true
@@ -287,16 +301,13 @@ export class Extract extends Tab{
 
     }
 
-    async getIdByPostId(postId){
+    static async getIdByPostId(postId: string){
         const uuid = await this.tab.findOne({
             where: { postId: postId },
             attributes: ['id'],
             raw: true})
 
-        if(uuid !== null){
-            return uuid.id
-        }
-        return null
+        return uuid?.id
     }
 
     getThemesIdsByNames(themes){

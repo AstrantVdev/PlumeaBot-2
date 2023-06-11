@@ -10,16 +10,12 @@ export class Text extends Tab{
     /**
      * 
      * @param id the text uuid
-     * @param postId the text unique forum channel on the discord server
      */
-    constructor(id, postId=null) {
-        if(postId){
-            this.get
-        }
+    constructor(id) {
         super(id)
     }
 
-    tab = db.define('texts', {
+    getTab = db.define('texts', {
         id: {
             type: DataTypes.UUID,
             primaryKey: true,

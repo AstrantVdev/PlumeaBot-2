@@ -12,7 +12,7 @@ export class TextRequest extends Tab{
         super()
     }
 
-    tab = db.define('textRequest', {
+    getTab = db.define('textRequest', {
         textId: DataTypes.UUID,
         senderId: DataTypes.BIGINT,
         date: DataTypes.DATE,
@@ -47,7 +47,7 @@ export class TextRequest extends Tab{
         const authorId = await text.getAuthorId()
 
         const embed = mes.newEmbed()
-            .setTitle(await text.getId_Text())
+            .setTitle(await text.getId_extract())
             .setDescription(
                 `<@${authorId}> t'as donné accès au texte mais tes mp sont fermés, ouvre les pour que le bot puisse t'envoyer le fichier ! ;-;\n` +
                 "> Clic droit sur Pluméa > [Paramètres de confidentialité] > [Messages privés]\n")
@@ -63,7 +63,7 @@ export class TextRequest extends Tab{
         const authorId = await text.getAuthorId()
 
         const embed = mes.newEmbed()
-            .setTitle(await text.getId_Text())
+            .setTitle(await text.getId_extract())
             .setDescription(`<@${authorId}> ne t'as pas donné accès au fichier ;-;\nps : ouvre tes mp stp, sinon je ne peux pas t'envoyer de messages...`)
 
         return {content: `<@${senderId}>`, embeds: [embed]}
@@ -96,7 +96,7 @@ export class TextRequest extends Tab{
         const authorId = await text.getAuthorId()
 
         const embed = mes.newEmbed()
-            .setTitle(await text.getId_Text())
+            .setTitle(await text.getId_extract())
             .setDescription(`$<@${authorId}> n'as pas répondu à ta demande ;-;'\nps : ouvre tes mp stp, sinon je ne peux pas t'envoyer de messages...`)
 
         return {embeds: [embed]}
@@ -143,7 +143,7 @@ export class TextRequest extends Tab{
         let date = new Date()
         date.setDate(date.getDate() - 4)
 
-        const goOut = await this.tab
+        const goOut = await this.getTab
             .findAll(
                 {
                     attributes: ["id", "senderId", "state"],

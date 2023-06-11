@@ -9,7 +9,7 @@ export class Sprint extends Tab{
         super()
     }
 
-    tab = db.define('sprints', {
+    getTab = db.define('sprints', {
         id: {
             type: DataTypes.UUID,
             primaryKey: true,

@@ -1,27 +1,35 @@
-import {Inter} from "./interObjects/Inter";
 import {getAllFilesInDir} from "./util";
 import {Sequelize} from "sequelize";
 export let db
 
-export class Tab {
-    public tab
+export abstract class Tab {
     public id : string
     public defaultParameter : string
 
+    /**
+     * @param id the object uuid
+     */
     constructor(id=null) {
-        if (this.constructor === Inter) {
-            throw new Error("Abstract classes can't be instantiated.")
-        }
         this.tab.sync()
         this.id = id
-
     }
 
-    async addOne(tab){
+    /**
+     * database's tab
+     */
+    public tab
+
+    /**
+     * add an item to the database's tab
+     */
+    async addOne(tab): Promise<void>{
         await db.tabCreate(tab)
     }
 
-    async getMember(){
+    /**
+     * 
+     */
+    public async getOne(): Promise<void>{
         await this.get()
     }
 
@@ -50,15 +58,15 @@ export class Tab {
     */
 
     async create(what){
-        await this.tab.create(what)
+        await this.getTab.create(what)
     }
 
     async destroy(){
-        await this.tab.destroy({ where: { id: this.id } })
+        await this.getTab.destroy({ where: { id: this.id } })
     }
 
     exist(){
-        return this.tab.count({ where: { id: this.id } })
+        return this.getTab.count({ where: { id: this.id } })
             .then(count => {
                 return count !== 0
 
@@ -67,7 +75,7 @@ export class Tab {
     }
 
     async get(){
-        return await this.tab.findOne({ where: { id: this.id } })
+        return await this.getTab.findOne({ where: { id: this.id } })
     }
 
     async getAtr(atr){
@@ -76,7 +84,7 @@ export class Tab {
             raw: true
         }
         if(this.id){ args["where"] = { id: this.id } }
-        const a = await this.tab.findOne(args)
+        const a = await this.getTab.findOne(args)
 
         return a[atr]
 
@@ -89,7 +97,7 @@ export class Tab {
         }
         if(this.id) args["where"] = { id: this.id }
 
-        const occurrences = await this.tab.findAll(args)
+        const occurrences = await this.getTab.findAll(args)
 
         const multipleAtr = []
         occurrences.forEach(o => {
@@ -106,20 +114,20 @@ export class Tab {
     }
 
     async setAtr(atr=this.defaultParameter, val){
-        await this.tab.update({ [atr]: val}, { where: { id: this.id } })
+        await this.getTab.update({ [atr]: val}, { where: { id: this.id } })
     }
 
     async setAtrToAll(atr, val){
-        await this.tab.update({ [atr]: val}, { 'where': { } } )
+        await this.getTab.update({ [atr]: val}, { 'where': { } } )
     }
 
     async addAtr(atr, val){
         const append = {[atr]: db.fn('array_append', db.col(atr), val)}
-        await this.tab.update( append, { 'where': { id: this.id } })
+        await this.getTab.update( append, { 'where': { id: this.id } })
     }
 
     async removeAtr(atr, val){
-        await this.tab.update({ [atr]: db.fn('array_remove', db.col(atr), val) }, { 'where': { id: this.id } })
+        await this.getTab.update({ [atr]: db.fn('array_remove', db.col(atr), val) }, { 'where': { id: this.id } })
     }
 
     async removeAtrIndex(atr, index){
@@ -129,7 +137,7 @@ export class Tab {
     }
 
     async incrementAtr(atr, i){
-        await this.tab.increment(atr, { by: i, where: { id: this.id }})
+        await this.getTab.increment(atr, { by: i, where: { id: this.id }})
     }
 
 }
@@ -173,7 +181,7 @@ export function sync(){
 
     for(const file of files){
         const object : Tab = new (require(file)[file.split("/")[-1].slice(0, -3)])()
-        object.tab.sync()
+        object.getTab.sync()
 
     }
 
