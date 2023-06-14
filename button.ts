@@ -1,9 +1,9 @@
 import {Inter} from "./interObjects/Inter"
 import {ButtonBuilder, ModalBuilder, ButtonStyle, ActionRowBuilder, TextInputBuilder} from "discord.js";
 export class Button extends Inter{
-    public id : string
-    public args : Array<string>
-    public row : boolean
+    id : string
+    args : Array<string>
+    row : boolean
 
     constructor(args, row =true) {
         super()
@@ -14,7 +14,7 @@ export class Button extends Inter{
         this.row = row
     }
 
-    public defaultButton() : ButtonBuilder{
+    defaultButton() : ButtonBuilder{
         let customId = this.id
         this.args.forEach(arg => {
             customId += "/" + arg.toString()
@@ -25,11 +25,11 @@ export class Button extends Inter{
             .setStyle(ButtonStyle.Primary)
     }
 
-    public button() : ButtonBuilder{
+    button() : ButtonBuilder{
         return this.defaultButton()
     }
 
-    public get() : ActionRowBuilder | ButtonBuilder{
+    get() : ActionRowBuilder | ButtonBuilder{
         const button = this.button()
         if(this.row){
             return new ActionRowBuilder().setComponents(button)

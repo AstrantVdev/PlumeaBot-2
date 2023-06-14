@@ -5,7 +5,7 @@ import { Inter } from "./Inter"
  * a custom command, watch {@link Inter} for core fonctions
  */
 export abstract class Cmd extends Inter{
-    public inter : ChatInputCommandInteraction
+    inter : ChatInputCommandInteraction
 
     constructor(inter){
         super(inter)

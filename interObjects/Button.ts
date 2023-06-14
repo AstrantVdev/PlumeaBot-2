@@ -5,7 +5,7 @@ import { Inter } from "./Inter"
  * a custom button, watch {@link Inter} for core fonctions
  */
 export abstract class Button extends Inter{
-    public inter : ButtonInteraction
+    inter : ButtonInteraction
 
     constructor(inter){
         super(inter)

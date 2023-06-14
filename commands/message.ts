@@ -8,11 +8,11 @@ import { InterError } from "../interObjects/InterError"
 
 export class message extends Cmd{
 
-    public constructor(inter) {
+    constructor(inter) {
         super(inter)
     }
 
-    public static get(){
+    static get(){
         return new SlashCommandBuilder()
             .setName('account-create')
             .setDescription('Crée un compte pour un utilisateur')
@@ -29,7 +29,7 @@ export class message extends Cmd{
                     .setRequired(true)))
     }
 
-    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
+    async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
 
         switch(this.inter.options.getSubcommand()){
             case "send":

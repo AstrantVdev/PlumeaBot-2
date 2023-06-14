@@ -2,9 +2,9 @@
  * an interaction error object
  */
 export class InterError {
-    public errorId: string
-    public lvl: number
-    public customMes: any
+    errorId: string
+    lvl: number
+    customMes: any
 
     /**
      * @param errorId id to retrieve error inside json config

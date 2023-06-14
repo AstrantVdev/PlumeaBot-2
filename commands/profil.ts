@@ -5,7 +5,7 @@ import { Cmd } from "../interObjects/Cmd"
 
 export class profil extends Cmd{
 
-    public constructor(inter) {
+    constructor(inter) {
         super(inter)
     }
 
@@ -14,7 +14,7 @@ export class profil extends Cmd{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    public static get(){
+    static get(){
 		return new SlashCommandBuilder()
 			.setName('profil')
 			.setDescription('Profil d~un pluméen')
@@ -25,7 +25,7 @@ export class profil extends Cmd{
 
 	}
 
-    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
+    async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
 		const member = inter.options.getMember('user')
 		const id = member.id
 

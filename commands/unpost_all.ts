@@ -5,7 +5,7 @@ import { Cmd } from "../interObjects/Cmd"
 
 export class unpost_all extends Cmd{
 
-    public constructor(inter) {
+    constructor(inter) {
         super(inter)
     }
 
@@ -14,7 +14,7 @@ export class unpost_all extends Cmd{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    public static get(){
+    static get(){
         return new SlashCommandBuilder()
             .setName('unpost-all')
             .setDescription("Enlève TOUS LES POSTS d'un utilisateur, pas les commentaire")
@@ -29,7 +29,7 @@ export class unpost_all extends Cmd{
 
     }
 
-    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
+    async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
         const user = inter.user
         let userId = user.id
 

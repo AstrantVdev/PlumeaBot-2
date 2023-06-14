@@ -25,11 +25,11 @@ StringSelectMenuInteraction | ChannelSelectMenuInteraction | UserSelectMenuInter
  * Class to create and manage custom discord js interaction features
  */
 export abstract class Inter {
-    public inter: DiscordInter
-    public categoryIds: [string]
-    public channelIds: [string]
-    public roleIds: [string]
-    public userIds: [string]
+    inter: DiscordInter
+    categoryIds: [string]
+    channelIds: [string]
+    roleIds: [string]
+    userIds: [string]
 
     /**
      * @param inter discord js interaction get in {@link interractionCreate}
@@ -38,7 +38,7 @@ export abstract class Inter {
      * @param roleIds ids of roles which can execute the interaction
      * @param userIds ids of users which can execute the interaction
      */
-    public constructor(inter: DiscordInter, categoryIds: [string]=null, channelIds: [string]=null, roleIds: [string]=null, userIds: [string]=null) {
+    constructor(inter: DiscordInter, categoryIds: [string]=null, channelIds: [string]=null, roleIds: [string]=null, userIds: [string]=null) {
         if (this.constructor === Inter) {
             throw new Error("Abstract classes can't be instantiated.")
         }
@@ -54,7 +54,7 @@ export abstract class Inter {
     /**
      * execute interaction and manage errors
      */
-    public async exe(): Promise<void> {
+    async exe(): Promise<void> {
        //to avoid interaction timeout
        await this.inter.deferReply({ephemeral: true})
 
@@ -95,7 +95,7 @@ export abstract class Inter {
      * @param customReply reply adressed to user if inter succeed
      * @param args list of variables and their keys to be parsed inside user and log message
      */
-    public abstract customExe(errors : Array<InterError>, customReply: string | any, args: Array<InterExeValue>): void
+    abstract customExe(errors : Array<InterError>, customReply: string | any, args: Array<InterExeValue>): void
 
     /**
      * log errors and send them to user inside a unique message using special format depending of their Id, customMessage and level
@@ -197,7 +197,7 @@ export abstract class Inter {
      * 
      * @returns obj with custom title for log message, and files if inter is a cmd
      */
-    public abstract chooseInterMessageTitle(): any
+    abstract chooseInterMessageTitle(): any
 
     /**
      * get default success message and fill it with execution values
@@ -223,7 +223,7 @@ export abstract class Inter {
      * @param customReply reply gived inside customExe function to be sent to user
      * @param args list of variables gived inside customExe to full customReply or not
      */
-    public success(customReply: string | any, args: Array<InterExeValue>): void {
+    success(customReply: string | any, args: Array<InterExeValue>): void {
         const mUtil = require("../utils/message")
         const { colors } = require('../utils/message')
 
@@ -288,8 +288,8 @@ export abstract class Inter {
  * litteraly interaction execution value, arg created in command's execution which will fill final message
  */
 export class InterExeValue {
-    public arg: string
-    public key: string
+    arg: string
+    key: string
 
     constructor(arg: string, key: string) {
         /**

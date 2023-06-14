@@ -5,7 +5,7 @@ import { Cmd } from "../interObjects/Cmd"
 
 export class sesame extends Cmd{
 
-    public constructor(inter) {
+    constructor(inter) {
         super(inter)
     }
 
@@ -14,7 +14,7 @@ export class sesame extends Cmd{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    public static get(){
+    static get(){
         return new SlashCommandBuilder()
             .setName('sesame')
             .setDescription("Permet d'accéder au serveur")
@@ -25,7 +25,7 @@ export class sesame extends Cmd{
 
     }
 
-    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
+    async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
         const pass = inter.options.getString('pass')
         const member = inter.member
         const plumeRole = c.roles.plumeen

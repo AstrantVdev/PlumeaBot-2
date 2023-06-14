@@ -13,9 +13,9 @@ export const types = {
 }
 
 export class Menu extends Inter{
-    public id : string
-    public type : string
-    public args : Array<string>
+    id : string
+    type : string
+    args : Array<string>
 
     constructor(args : Array<string> | string, type:string=null, id:string=null) {
         super()
@@ -38,18 +38,18 @@ export class Menu extends Inter{
 
     }
 
-    public menu() : ModalBuilder{
+    menu() : ModalBuilder{
         throw new Error("Method 'menu()' must be implemented.")
     }
 
-    public get(row=true) : ModalBuilder | ActionRowBuilder{
+    get(row=true) : ModalBuilder | ActionRowBuilder{
         if(row){
             return new ActionRowBuilder<any>().setComponents(this.menu())
         }
         return this.menu()
     }
 
-    public button(){
+    button(){
         let customId = `${this.type}/${this.id}`
         this.args.forEach(arg => {
             customId += "/" + arg.toString()
@@ -60,7 +60,7 @@ export class Menu extends Inter{
             .setStyle(ButtonStyle.Primary)
     }
 
-    public getButton(row = true){
+    getButton(row = true){
         const button = this.button()
 
         if(row){

@@ -5,7 +5,7 @@ import { Cmd } from "../interObjects/Cmd"
 
 export class amote extends Cmd{
 
-    public constructor(inter) {
+    constructor(inter) {
         super(inter)
     }
 
@@ -14,14 +14,14 @@ export class amote extends Cmd{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    public static get(){
+    static get(){
 		return new SlashCommandBuilder()
 			.setName('emote')
 			.setDescription('plume')
 
 	}
 
-    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
+    async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
 		await mes.interSuccess(inter, { content: c.emotes.plume, formatted: true, ephemeral: false })
 
 		/*

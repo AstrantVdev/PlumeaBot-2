@@ -7,7 +7,7 @@ export class message_sends extends Modal{
         super(args, "message_sends")
     }
 
-    public menu(){
+    menu(){
         const modal = new ModalBuilder()
             .setCustomId(this.id)
             .setTitle('Message Create/Edit')

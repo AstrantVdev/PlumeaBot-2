@@ -5,7 +5,7 @@ import { Cmd } from "../interObjects/Cmd"
 
 export class sprint extends Cmd{
 
-    public constructor(inter) {
+    constructor(inter) {
         super(inter)
     }
 
@@ -14,14 +14,14 @@ export class sprint extends Cmd{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    public static get(){
+    static get(){
         return new SlashCommandBuilder()
         .setName('sprint')
         .setDescription('Bah Sprint... O.o')
 
     }
 
-    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
+    async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
         const channelId = inter.channel.id
 
         if(await sUtils.isChannel(channelId)){

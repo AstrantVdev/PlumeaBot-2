@@ -5,7 +5,7 @@ import { Inter } from "./Inter"
  * a custom modal, watch {@link Inter} for core fonctions
  */
 export abstract class Modal extends Inter{
-    public inter : ModalSubmitInteraction
+    inter : ModalSubmitInteraction
 
     constructor(inter){
         super(inter)

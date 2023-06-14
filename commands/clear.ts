@@ -7,7 +7,7 @@ import { c } from "../config"
 
 export class clear extends Cmd{
 
-    public constructor(inter) {
+    constructor(inter) {
         super(inter)
     }
 
@@ -16,7 +16,7 @@ export class clear extends Cmd{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    public static get(){
+    static get(){
         return new SlashCommandBuilder()
             .setName('clear')
             .setDescription('Atomise tout les messages du salon')
@@ -34,7 +34,7 @@ export class clear extends Cmd{
 
     }
 
-    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
+    async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
         // set number of messages to be deleted
         let n = 100
         const m = this.inter.options.getInteger('clear_intensity')

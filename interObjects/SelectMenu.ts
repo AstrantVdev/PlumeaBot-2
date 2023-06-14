@@ -5,7 +5,7 @@ import { Inter } from "./Inter"
  * a selectMenu command, watch {@link Inter} for core fonctions
  */
 export abstract class SelectMenu extends Inter{
-    public inter : StringSelectMenuInteraction | ChannelSelectMenuInteraction | UserSelectMenuInteraction | RoleSelectMenuInteraction | MentionableSelectMenuInteraction
+    inter : StringSelectMenuInteraction | ChannelSelectMenuInteraction | UserSelectMenuInteraction | RoleSelectMenuInteraction | MentionableSelectMenuInteraction
 
     constructor(inter){
         super(inter)

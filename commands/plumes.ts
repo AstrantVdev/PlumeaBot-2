@@ -5,7 +5,7 @@ import { Cmd } from "../interObjects/Cmd"
 
 export class plumes extends Cmd{
 
-    public constructor(inter) {
+    constructor(inter) {
         super(inter)
     }
 
@@ -14,7 +14,7 @@ export class plumes extends Cmd{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    public static get(){
+    static get(){
         return new SlashCommandBuilder()
             .setName('plumes')
             .setDescription('Ajoute un nombre de plumes à un' + c.string.inhab + ', négatif ou positif, au choix')
@@ -35,7 +35,7 @@ export class plumes extends Cmd{
 
     }
 
-    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
+    async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
         const user = inter.options.getMember('user')
         let p = inter.options.getInteger('plumes')
 

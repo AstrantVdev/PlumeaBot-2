@@ -8,7 +8,7 @@ export class Member extends Tab{
         super(id)
     }
 
-    public getTab = db.define('members', {
+    getTab = db.define('members', {
         id: {
             type: DataTypes.BIGINT,
             primaryKey: true,

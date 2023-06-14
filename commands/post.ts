@@ -5,7 +5,7 @@ import { Cmd } from "../interObjects/Cmd"
 
 export class post extends Cmd{
 
-    public constructor(inter) {
+    constructor(inter) {
         super(inter)
     }
 
@@ -14,7 +14,7 @@ export class post extends Cmd{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    public static get(){
+    static get(){
         return new SlashCommandBuilder()
         .setName('post')
         .setDescription('Permet de poster votre texte')
@@ -25,7 +25,7 @@ export class post extends Cmd{
 
     }
 
-    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
+    async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
         let file = inter.options.getAttachment("fichier")
         const user = inter.member.user
         const id = user.id

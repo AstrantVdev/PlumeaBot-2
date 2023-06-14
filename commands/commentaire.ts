@@ -7,7 +7,7 @@ import { Extract } from "../dbObjects/Extract"
 
 export class commentaire extends Cmd{
 
-    public constructor(inter) {
+    constructor(inter) {
         super(inter)
     }
 
@@ -16,14 +16,14 @@ export class commentaire extends Cmd{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    public static get(){
+    static get(){
         return new SlashCommandBuilder()
             .setName('commentaire')
             .setDescription('Offffficialiiiise un commentaire')
 
     }
 
-    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
+    async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
         const postId = this.inter.channel.id
         const extract = new Extract(Extract.getIdByPostId)
         const member = this.inter.member as GuildMember

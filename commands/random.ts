@@ -5,7 +5,7 @@ import { Cmd } from "../interObjects/Cmd"
 
 export class random extends Cmd{
 
-    public constructor(inter) {
+    constructor(inter) {
         super(inter)
     }
 
@@ -14,7 +14,7 @@ export class random extends Cmd{
      * 
      * @returns SlashCommandBuilder with all cmd infos, name, desc, args, etc...
      */
-    public static get(){
+    static get(){
         return new SlashCommandBuilder()
             .setName('random')
             .setDescription('Donne un nombre au hasard')
@@ -27,7 +27,7 @@ export class random extends Cmd{
 
     }
 
-    public async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
+    async customExe(errors : Array<InterError>, customReply, args) : Promise<void> {
         let n = inter.options.getInteger('faces')
         const r = Math.floor(Math.random() * (n + 1))
 
