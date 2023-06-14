@@ -1,12 +1,10 @@
-/**
- * an interaction error object
- */
 export class InterError {
     errorId: string
     lvl: number
     customMes: any
 
     /**
+     * an interaction error object
      * @param errorId id to retrieve error inside json config
      * @param lvl error's gravvity level
      * @param customMes a simple string to fill error message embed | some components or embeds or content to fill the error message

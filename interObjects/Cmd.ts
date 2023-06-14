@@ -1,12 +1,13 @@
 import { ChatInputCommandInteraction } from "discord.js"
 import { Inter } from "./Inter"
 
-/**
- * a custom command, watch {@link Inter} for core fonctions
- */
 export abstract class Cmd extends Inter{
     inter : ChatInputCommandInteraction
 
+    /**
+     * a custom command, watch {@link Inter} for core fonctions
+     * @param inter the discord js interaction
+     */
     constructor(inter){
         super(inter)
 

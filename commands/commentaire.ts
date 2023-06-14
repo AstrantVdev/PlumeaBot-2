@@ -2,8 +2,8 @@ import { SlashCommandBuilder, ActionRowBuilder, GuildMember } from "discord.js"
 import { client } from ".."
 import { InterError } from "../interObjects/InterError"
 import { Cmd } from "../interObjects/Cmd"
-import { Text } from "../dbObjects/Text"
-import { Extract } from "../dbObjects/Extract"
+import { Text } from "../db/dbObjs/Text"
+import { Extract } from "../db/dbObjs/Extract"
 
 export class commentaire extends Cmd{
 

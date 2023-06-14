@@ -20,10 +20,6 @@ import { ArrayParameter } from "postgres"
 type DiscordInter = ChatInputCommandInteraction | ButtonInteraction | ModalSubmitInteraction | 
 StringSelectMenuInteraction | ChannelSelectMenuInteraction | UserSelectMenuInteraction | RoleSelectMenuInteraction | MentionableSelectMenuInteraction
 
-
-/**
- * Class to create and manage custom discord js interaction features
- */
 export abstract class Inter {
     inter: DiscordInter
     categoryIds: [string]
@@ -32,6 +28,7 @@ export abstract class Inter {
     userIds: [string]
 
     /**
+     * Class to create and manage custom discord js interaction features
      * @param inter discord js interaction get in {@link interractionCreate}
      * @param channelIds ids of channels where interaction can be executed
      * @param categoryIds ids of categories where interaction can be executed
@@ -284,27 +281,22 @@ export abstract class Inter {
 
 }
 
-/**
- * litteraly interaction execution value, arg created in command's execution which will fill final message
- */
 export class InterExeValue {
     arg: string
     key: string
 
+    /**
+     * litteraly interaction execution value, arg created in command's execution which will fill final message
+     * @param arg arg value
+     * @param key key replaced by value in default message from config
+     */
     constructor(arg: string, key: string) {
-        /**
-         * @param arg arg value
-         */
         this.arg = arg
-        /**
-         * @param key key replaced by value in default message from config
-         */
         this.key = key
     }
 
     /**
      * fill a string which will be filled with arg value for each key occurence
-     * 
      * @param message the input string
      */
     fillMessage(message: string): void {

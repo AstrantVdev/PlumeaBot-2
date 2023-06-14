@@ -1,4 +1,4 @@
-import {Tab, db} from "../dbManager";
+import {Tab, db} from "./Tab";
 import {DataTypes} from "sequelize";
 import {c} from "../config";
 import {ActionRowBuilder} from "discord.js";

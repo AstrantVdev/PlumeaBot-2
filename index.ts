@@ -29,7 +29,7 @@ export let client = new Client({
     ]
 })
 
-import {setUp} from "./dbManager"
+import {setUp} from "./db/Tab"
 setUp()
 eventHandler()
 start()

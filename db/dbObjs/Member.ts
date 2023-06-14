@@ -1,14 +1,14 @@
-import {Tab, db} from "../dbManager"
 import {DataTypes, Op} from "sequelize"
 import {delMes, newEmbed, sendMes} from "../utils/message"
 import {c} from "../config";
+import { Tab } from "./Tab";
 
 export class Member extends Tab{
     constructor(id=null) {
         super(id)
     }
 
-    getTab = db.define('members', {
+    static tab = db.define('members', {
         id: {
             type: DataTypes.BIGINT,
             primaryKey: true,

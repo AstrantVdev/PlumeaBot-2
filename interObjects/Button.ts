@@ -2,11 +2,15 @@ import { ButtonInteraction } from "discord.js"
 import { Inter } from "./Inter"
 
 /**
- * a custom button, watch {@link Inter} for core fonctions
+ * 
  */
 export abstract class Button extends Inter{
     inter : ButtonInteraction
 
+    /**
+     * a custom button, watch {@link Inter} for core fonctions
+     * @param inter the discord js interaction
+     */
     constructor(inter){
         super(inter)
 

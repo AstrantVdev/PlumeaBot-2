@@ -1,19 +1,19 @@
 import { ModalSubmitInteraction } from "discord.js"
 import { Inter } from "./Inter"
 
-/**
- * a custom modal, watch {@link Inter} for core fonctions
- */
 export abstract class Modal extends Inter{
     inter : ModalSubmitInteraction
 
+    /**
+     * a custom modal, watch {@link Inter} for core fonctions
+     * @param inter the discord js interaction
+     */
     constructor(inter){
         super(inter)
     }
 
     /**
      * choose interaction log message title in fonction of it type
-     * 
      * @returns obj with custom title for log message, and files if inter is a cmd
      */
     chooseInterMessageTitle(): any{

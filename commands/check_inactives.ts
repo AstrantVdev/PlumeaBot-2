@@ -1,6 +1,6 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js"
 import { InterError } from "../interObjects/InterError"
-import { Member } from "../dbObjects/Member"
+import { Member } from "../db/Member"
 import { Cmd } from "../interObjects/Cmd"
 import { c } from "../config"
 

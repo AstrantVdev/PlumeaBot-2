@@ -1,12 +1,13 @@
 import { ChannelSelectMenuInteraction, MentionableSelectMenuInteraction, RoleSelectMenuInteraction, StringSelectMenuInteraction, UserSelectMenuInteraction } from "discord.js"
 import { Inter } from "./Inter"
 
-/**
- * a selectMenu command, watch {@link Inter} for core fonctions
- */
 export abstract class SelectMenu extends Inter{
     inter : StringSelectMenuInteraction | ChannelSelectMenuInteraction | UserSelectMenuInteraction | RoleSelectMenuInteraction | MentionableSelectMenuInteraction
 
+    /**
+     * a selectMenu command, watch {@link Inter} for core fonctions
+     * @param inter the discord js interaction
+     */
     constructor(inter){
         super(inter)
 

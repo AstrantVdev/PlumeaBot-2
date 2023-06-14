@@ -1,8 +1,8 @@
-import {Tab, db} from "../dbManager"
+import {Tab, db} from "./Tab"
 import {DataTypes, Op} from "sequelize"
 import {ActionRowBuilder} from "discord.js"
 import {c} from "../config"
-import {Extract} from "./Extract";
+import {Extract} from "./dbObjects/Extract";
 import {delMes} from "../utils/message";
 import {client} from "../index";
 

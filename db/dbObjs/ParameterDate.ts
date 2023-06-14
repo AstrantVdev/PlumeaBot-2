@@ -1,5 +1,5 @@
 import {DataTypes} from "sequelize";
-import {Tab, db} from "../dbManager";
+import {Tab, db} from "./Tab";
 
 export class ParameterDate extends Tab{
 

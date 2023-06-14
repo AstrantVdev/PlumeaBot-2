@@ -1,18 +1,17 @@
 
-import {Tab, db} from "../dbManager"
+import {Tab} from "../Tab"
 import {DataTypes, Op} from "sequelize"
-import {c} from "../config"
-import {client} from "../index";
+import {c} from "../../config"
+import {client} from "../../index";
 import {Member} from "./Member";
 import { Embed, Message } from "discord.js";
 
 /**
- * an extract link to a text and containing some chapters
+ * a text's extract object. It links to a text and contains some chapters.
  */
 export class Extract extends Tab{
 
     /**
-     * 
      * @param id extract uuid
      */
     constructor(id=null) {
@@ -116,15 +115,15 @@ export class Extract extends Tab{
         return this.getAtr('id_extract')
     }
 
-    async setId_extract(id_extract): Promise<void>{
+    async setId_extract(id_extract: string): Promise<void>{
         await this.setAtr('id_extract', id_extract)
     }
 
-    async getIdTitle(id): Promise<string>{
+    async getIdTitle(): Promise<string>{
         return this.getAtr('id_extract_title')
     }
 
-    async setIdTitle(id_extractTitle): Promise<void>{
+    async setIdTitle(id_extractTitle: string): Promise<void>{
         await this.setAtr('id_extract_title', id_extractTitle)
     }
 
@@ -132,7 +131,7 @@ export class Extract extends Tab{
         return this.getAtr('title')
     }
 
-    async setTitle(title): Promise<void>{
+    async setTitle(title: string): Promise<void>{
         await this.setAtr('title', title)
     }
 
@@ -140,7 +139,7 @@ export class Extract extends Tab{
         return this.getAtr('desc')
     }
 
-    async setDesc(desc): Promise<void>{
+    async setDesc(desc: string): Promise<void>{
         await this.setAtr('desc', desc)
     }
 
@@ -148,7 +147,7 @@ export class Extract extends Tab{
         return this.getAtr('authorId')
     }
 
-    async setAuthorId(authorId): Promise<void>{
+    async setAuthorId(authorId: string): Promise<void>{
         await this.setAtr('authorId', authorId)
     }
 
@@ -156,7 +155,7 @@ export class Extract extends Tab{
         return this.getAtr('chap1')
     }
 
-    async setChap1(chap1): Promise<void>{
+    async setChap1(chap1: number): Promise<void>{
         await this.setAtr('chap1', chap1)
     }
 
@@ -164,7 +163,7 @@ export class Extract extends Tab{
         return this.getAtr('chap2')
     }
 
-    async setChap2(chap2): Promise<void>{
+    async setChap2(chap2: number): Promise<void>{
         await this.setAtr('chap2', chap2)
     }
 
@@ -172,16 +171,16 @@ export class Extract extends Tab{
         return this.getAtr('words')
     }
 
-    async setWords(words): Promise<void>{
+    async setWords(words: number): Promise<void>{
         await this.setAtr('words', words)
     }
 
-    async setProtected(isProtected): Promise<void>{
+    async setProtected(isProtected: boolean): Promise<void>{
         await this.setAtr('protected', isProtected)
 
     }
 
-    async isProtected(): Promise<Boolean>{
+    async isProtected(): Promise<boolean>{
         return this.getAtr('protected')
     }
 
@@ -189,7 +188,7 @@ export class Extract extends Tab{
         return this.getAtr('extractMesId')
     }
 
-    async setMesId(extractMesId): Promise<void>{
+    async setMesId(extractMesId: string): Promise<void>{
         await this.setAtr('extractMesId', extractMesId)
     }
 
@@ -201,11 +200,11 @@ export class Extract extends Tab{
         return await mes.getMes(c.channels.safe, await this.getFileMesId())
     }
 
-    async setFileMesId(fileMes): Promise<void>{
+    async setFileMesId(fileMes: string): Promise<void>{
         await this.setAtr('fileMesId', fileMes)
     }
 
-    async setPostId(postId): Promise<void>{
+    async setPostId(postId: string): Promise<void>{
         await this.setAtr('postId', postId)
     }
 
@@ -213,7 +212,7 @@ export class Extract extends Tab{
         return this.getAtr('postId')
     }
 
-    async setPostMesId(postMesId): Promise<void>{
+    async setPostMesId(postMesId: string): Promise<void>{
         await this.setAtr('postMesId', postMesId)
     }
 
@@ -225,7 +224,7 @@ export class Extract extends Tab{
         return this.getAtr('date')
     }
 
-    async setDate(date): Promise<void>{
+    async setDate(date: Date): Promise<void>{
         await this.setAtr('date', date)
     }
 
@@ -233,7 +232,7 @@ export class Extract extends Tab{
         return this.getAtr('themes')
     }
 
-    async setThemes(themes): Promise<void>{
+    async setThemes(themes: Array<string>): Promise<void>{
         await this.setAtr('themes', themes)
     }
 
@@ -241,7 +240,7 @@ export class Extract extends Tab{
         return this.getAtr('questions')
     }
 
-    async setQuestions(questions): Promise<void>{
+    async setQuestions(questions: Array<string>): Promise<void>{
         await this.setAtr('questions', questions)
     }
 
@@ -250,11 +249,11 @@ export class Extract extends Tab{
     }
 
     /**
-     * 
-     * @param member the member who asked the file
-     * @returns 
+     * send in dm the extract file to who asked
+     * @param member who asked the file
+     * @returns the dm message to verify if it sent
      */
-    async sendFile(member): Promise<Message>{
+    async sendFile(member: Member): Promise<Message>{
         const message = await mes.getMes(c.channels.safe, await this.getFileMesId())
         const file = message.attachments.first()
         const authorId = await this.getAuthorId()
@@ -267,7 +266,12 @@ export class Extract extends Tab{
         return await mes.privateMes(member, { embeds: [embed], files: [file] })
     }
 
-    buildQuestionsEmbed(questions): Promise<Embed>{
+    /**
+     * create an embed with the author questions which will be parsed inside extract forum channel
+     * @param questions all authors questions
+     * @returns the formatted embed
+     */
+    buildQuestionsEmbed(questions: Array<string>): Promise<Embed>{
         let desc = ''
         questions.forEach(q => {
             desc += q + '\n\n'
@@ -279,11 +283,11 @@ export class Extract extends Tab{
     }
 
     /**
-     * 
+     * get all extracts with similar text uuid (to get all extracts from a sam text)
      * @param id_extract_title 
      * @param id 
      * @param uuid 
-     * @returns 
+     * @returns all similar extracts Ids
      * @deprecated
      */
     async getSimilarExtractUUID(id_extract_title, id, uuid){
@@ -317,6 +321,11 @@ export class Extract extends Tab{
     }
 
     
+    /**
+     * to find an extract Id with his forum channel Id (when someone send a message etc...)
+     * @param postId the forum chnnel Id
+     * @returns the good extract Id if there si one and null either
+     */
     static async getIdByPostId(postId: string): Promise<string>{
         const uuid = await this.tab.findOne({
             where: { postId: postId },
@@ -326,7 +335,12 @@ export class Extract extends Tab{
         return uuid?.id
     }
 
-    getThemesIdsByNames(themes): Array<string>{
+    /**
+     * all themes have names and ids, this method retrieve all themes ids by their names
+     * @param themes a list of themes names (not null)
+     * @returns all corresponding themes' ids
+     */
+    getThemesIdsByNames(themes: Array<string>): Array<string>{
         let themesIds: Array<string>
 
         for(const t of c.themes){

@@ -1,4 +1,4 @@
-import {Tab, db} from "../dbManager";
+import {Tab, db} from "./Tab";
 import {DataTypes} from "sequelize";
 
 export class Sprinter extends Tab{

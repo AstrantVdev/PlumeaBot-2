@@ -1,5 +1,5 @@
 
-import {Tab, db} from "../dbManager"
+import {Tab, db} from "../Tab"
 import {DataTypes, Op} from "sequelize"
 
 /**
