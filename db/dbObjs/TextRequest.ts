@@ -1,19 +1,22 @@
-import {Tab, db} from "./Tab"
 import {DataTypes, Op} from "sequelize"
 import {ActionRowBuilder} from "discord.js"
-import {c} from "../config"
-import {Extract} from "./dbObjects/Extract";
-import {delMes} from "../utils/message";
-import {client} from "../index";
+import { client } from "../.."
+import { Item } from "../Item"
+import { Extract } from "./Extract"
+import { Text } from "./Text"
 
-export class TextRequest extends Tab{
+export class TextRequest extends Item{
+    extractId: string
+    senderId: string
+    date: Date
+    state: string
 
     constructor(id=null) {
-        super()
+        super(id)
     }
 
-    getTab = db.define('textRequest', {
-        textId: DataTypes.UUID,
+    static tab = this.db.define('textRequest', {
+        extractId: DataTypes.UUID,
         senderId: DataTypes.BIGINT,
         date: DataTypes.DATE,
         state: {
@@ -23,38 +26,46 @@ export class TextRequest extends Tab{
 
     })
 
-    async sendMes(user, textId){
-        const text = new Extract(textId)
-        const authorId = await text.getAuthorId()
-        const senderId = user.id
+    /**
+     * send request message in good channel
+     * @param sender discord user who sent the request (to get his username easier)
+     * @returns the sent message
+     */
+    async sendMes(sender): Promise<void>{
+        const extract = new Extract(this.extractId)
+        const text = new Text(await extract.getTextId())
 
         const embed = mes.newEmbed()
-            .setTitle(await text.getId_extract())
-            .setDescription(`<@${senderId}> | ${user.username} demande l'accès au texte`)
+            .setTitle(await text.get())
+            .setDescription(`<@${this.senderId}> | ${sender.username} demande l'accès au texte`)
 
         const row = new ActionRowBuilder()
             .setComponents(
-                require("../buttons/textRequestAccept").get(senderId, textId),
-                require("../buttons/textRequestDeny").get(senderId, textId),
+                require("../buttons/textRequestAccept").get(this.senderId, text.id),
+                require("../buttons/textRequestDeny").get(this.senderId, text.id),
             )
 
-        return await mes.sendMes(c.channels.textRequest, { content: `<@${authorId}>`, embeds: [embed], components: [row]})
+        return await mes.sendMes(c.channels.textRequest, { content: `<@${text.authorId}>`, embeds: [embed], components: [row]})
 
     }
 
-    async sendAccept(senderId, textId){
-        const text = new Extract(textId)
-        const authorId = await text.getAuthorId()
+    /**
+     * 
+     * @returns the sent message
+     */
+    async sendAccept(): Promise<void>{
+        const extract = new Extract(this.extractId)
+        const text = new Text(await extract.getTextId())
 
         const embed = mes.newEmbed()
-            .setTitle(await text.getId_extract())
+            .setTitle(await extract.getId_extract())
             .setDescription(
-                `<@${authorId}> t'as donné accès au texte mais tes mp sont fermés, ouvre les pour que le bot puisse t'envoyer le fichier ! ;-;\n` +
+                `<@${text.getAuthorId()}> t'as donné accès au texte mais tes mp sont fermés, ouvre les pour que le bot puisse t'envoyer le fichier ! ;-;\n` +
                 "> Clic droit sur Pluméa > [Paramètres de confidentialité] > [Messages privés]\n")
             .setImage("https://cdn.discordapp.com/attachments/1075907880055742494/1077992029956608050/plumea_demo.gif")
 
-        const row = require("../buttons/textGet").get(textId, senderId, true)
-        return await mes.sendMes(c.channels.textRequest, { content: `<@${senderId}>`, embeds: [embed], components: [row]})
+        const row = require("../buttons/textGet").get(text.id, this.senderId, true)
+        return await mes.sendMes(c.channels.textRequest, { content: `<@${this.senderId}>`, embeds: [embed], components: [row]})
 
     }
 

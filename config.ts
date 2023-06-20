@@ -27,6 +27,12 @@ export const c =
             }
         },
 
+        messages:{
+            textRequests: {
+
+            }
+        }
+
         weeklyPlumes: 1,
 
         messages: {

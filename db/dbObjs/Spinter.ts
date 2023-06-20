@@ -1,16 +1,23 @@
-import {Tab, db} from "./Tab";
 import {DataTypes} from "sequelize";
+import { Item } from "../Item";
 
-export class Sprinter extends Tab{
+export class Sprinter extends Item{
+    userId: string
+    sprintId: string
+    joinDate: Date
+    beginWords: number
+    endWords: number
 
     constructor(id=null) {
         super(id)
     }
 
-    getTab = db.define('sprinters', {
+    static tab = this.db.define('sprinters', {
         userId: DataTypes.STRING,
-        sprint: DataTypes.UUID,
-        join: DataTypes.DATE
+        sprintId: DataTypes.UUID,
+        joinDate: DataTypes.DATE,
+        beginWords: DataTypes.INTEGER,
+        endWords: DataTypes.INTEGER
 
     })
 

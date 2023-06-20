@@ -1,21 +1,25 @@
 
-import {Tab, db} from "../Tab"
 import {DataTypes, Op} from "sequelize"
+import { Item } from "../Item"
 
 /**
  * text object from an author
  */
-export class Text extends Tab{
+export class Text extends Item{
+    id: string
+    desc: string
+    authorId: string
+    words: string
+    extrcatIds: string[]
 
     /**
-     * 
      * @param id the text uuid
      */
     constructor(id) {
         super(id)
     }
 
-    getTab = db.define('texts', {
+    static tab = this.db.define('texts', {
         id: {
             type: DataTypes.UUID,
             primaryKey: true,

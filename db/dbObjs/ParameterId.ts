@@ -1,13 +1,13 @@
-import {Tab, db} from "./Tab";
-import {DataTypes} from "sequelize";
+import {DataTypes} from "sequelize"
+import { Item } from "../Item"
 
-export class ParameterId extends Tab{
+export class ParameterId extends Item{
 
     constructor(id=null) {
         super(id)
     }
 
-    getTab = db.define('parametersIds', {
+    static tab = this.db.define('parametersIds', {
         id: {
             type: DataTypes.STRING,
             primaryKey: true,

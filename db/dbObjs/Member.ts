@@ -1,14 +1,25 @@
-import {DataTypes, Op} from "sequelize"
-import {delMes, newEmbed, sendMes} from "../utils/message"
-import {c} from "../config";
-import { Tab } from "./Tab";
+import {DataTypes, Error, Op} from "sequelize"
+import { Item } from "../Item"
+import { error } from "console"
 
-export class Member extends Tab{
+export class Member extends Item{
+    id: string
+    nick: string
+    joinDate: Date
+    textIds: [string]
+    medalsIds: [string]
+    cardsIds: [string]
+    plumes: number
+    coins: number
+    weeklyWords: number
+    tutoIds: number
+    extractInPostingId: string
+
     constructor(id=null) {
         super(id)
     }
 
-    static tab = db.define('members', {
+    static tab = this.db.define('members', {
         id: {
             type: DataTypes.BIGINT,
             primaryKey: true,
@@ -19,15 +30,15 @@ export class Member extends Tab{
             defaultValue: 'o'
         },
         joinDate: DataTypes.DATE,
-        extractIds: {
+        textIds: {
             type: DataTypes.ARRAY(DataTypes.UUID),
             defaultValue: []
         },
-        medals: {
+        medalsIds: {
             type: DataTypes.ARRAY(DataTypes.UUID),
             defaultValue: []
         },
-        cards: {
+        cardsIds: {
             type: DataTypes.ARRAY(DataTypes.UUID),
             defaultValue: []
         },
@@ -47,24 +58,28 @@ export class Member extends Tab{
             type: DataTypes.ARRAY(DataTypes.INTEGER),
             defaultValue: []
         },
-        extractOnPostingId: DataTypes.UUID
+        extractInPostingId: DataTypes.UUID
 
     })
 
-    async addOne(){
+    async create(): Promise<void>{
         const date = new Date()
 
-        await this.create({
+        await super.create({
             id: this.id,
             joinDate: date
         })
     }
 
-    static async getInactivesIds(){
+    /**
+     * find all members on the server since one month and without any plumes, they are considered inactives
+     * @returns array of inactives members ids
+     */
+    static async getInactivesIds(): Promise<[string]>{
         const today = new Date()
         const limit = today.setDate(today.getDate() - 32)
 
-        return db.findAll({
+        return this.db.findAll({
             where: {
                 plumes: 0,
                 joinDate: {
@@ -76,119 +91,93 @@ export class Member extends Tab{
         })
     }
 
-    async getNick(){
+    async getNick(): Promise<string>{
         return await this.getAtr('nick')
     }
 
-    async setNick(nick){
+    async setNick(nick): Promise<void>{
+        if(nick.length !== 4) new error("nick is 4 letters length")
         await this.setAtr('nick', nick)
     }
 
-    async hasNick(){
+    async hasNick(): Promise<boolean>{
         const nick = await this.getNick()
         return nick.length === 4
     }
 
-    async getPlumes(){
+    async getPlumes(): Promise<number>{
         return this.getAtr('plumes')
     }
 
-    async addPlumes(plumes){
+    async addPlumes(plumes): Promise<void>{
         await this.incrementAtr('plumes', plumes)
     }
 
-    async removePlumes(plumes){
+    async removePlumes(plumes): Promise<void>{
         await this.incrementAtr('plumes', -plumes)
     }
 
-    async getCoins(){
+    async getCoins(): Promise<number>{
         return this.getAtr("coins")
     }
 
-    async addCoins(coins){
+    async addCoins(coins): Promise<void>{
         await this.incrementAtr('coins', coins)
     }
 
-    async removeCoins(coins){
+    async removeCoins(coins): Promise<void>{
         await this.incrementAtr('coins', -coins)
     }
 
-    async getWeeklyWords(){
+    async getWeeklyWords(): Promise<number>{
         return this.getAtr('weeklyWords')
     }
 
-    async addWeeklyWords(weeklyWords){
+    async addWeeklyWords(weeklyWords): Promise<void>{
         await this.incrementAtr('weeklyWords', weeklyWords)
     }
 
-    async getJoinDate(){
+    async getJoinDate(): Promise<Date>{
         return this.getAtr('joinDate')
 
     }
 
-    async removeWeeklyWords(weeklyWords){
+    async removeWeeklyWords(weeklyWords): Promise<void>{
         await this.incrementAtr('weeklyWords', -weeklyWords)
     }
 
-    async toMuchWeeklyWords(words){
+    async toMuchWeeklyWords(words): Promise<boolean>{
         const weekly = await this.getWeeklyWords()
         return weekly + words > 16000;
 
     }
 
-    async resetAllWeeklyWords(){
+    async resetAllWeeklyWords(): Promise<void>{
         await this.setAtrToAll('weeklyWords', 0)
     }
 
-    async isFileInPosting(){
-        return await this.getFileInPostingMesId() !== 0
+    async addTextId(id): Promise<void>{
+        await this.addAtr('textIds', id)
     }
 
-    async setFileInPostingMesId(fileInPostingMesId){
-        await this.setAtr('fileInPostingMesId', fileInPostingMesId)
+    async removeTextId(id): Promise<void>{
+        await this.removeAtr('textIds', id)
     }
 
-    async getFileInPostingMesId(){
-        return this.getAtr('fileInPostingMesId')
+    async removeAllTextIds(): Promise<void>{
+        await this.setAtr("textIds", [])
     }
 
-    async removeFileInPostingMes(){
-        await delMes(c.channels.safe, await this.getFileInPostingMesId())
-    }
-
-    async addFileInPosting(user, file){
-        const embed = newEmbed()
-            .setTitle("Extrait en /post")
-            .setDescription(`par ${user}`)
-
-        const fileInPostingMes = await sendMes(c.channels.safe, {embeds: [embed], files: [file]})
-        await this.setFileInPostingMesId(fileInPostingMes.id)
-
-    }
-
-    async addExtractId(id){
-        await this.addAtr('extractIds', id)
-    }
-
-    async removeExtractId(id){
-        await this.removeAtr('extractIds', id)
-    }
-
-    async removeAllExtractIds(){
-        await this.setAtr("extractIds", [])
-    }
-
-    async getAllIdsPlumes(){
+    async getAllIdsPlumes(): Promise<Object[]>{
         return this.getMultipleAtr(['id', 'plumes'])
     }
 
-    async hasTutoId(tutoId){
+    async hasTutoId(tutoId: Promise<boolean>){
         const tutoIds = await this.getAtr('tutoIds')
         return tutoIds.includes(tutoId)
-
     }
 
-    async addTutoId(tutoId){
+    async addTutoId(tutoId: Promise<void>){
         await this.addAtr('tutoIds', tutoId)
     }
 

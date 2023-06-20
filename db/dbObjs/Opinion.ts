@@ -1,16 +1,22 @@
-import {Tab, db} from "./Tab"
-import {DataTypes} from "sequelize"
-import {parameter, ParameterId} from "./ParameterId"
-import {client} from "../index"
-import {newEmbed, sendMes} from "../utils/message"
-import{c} from "../config"
-export  class Opinion extends Tab{
+import { DataTypes } from "sequelize"
+import { client } from "../.."
+import { newEmbed, sendMes } from "../../utils/message"
+import { Item } from "../Item"
+import { ParameterId, parameter } from "./ParameterId"
+
+export  class Opinion extends Item{
+    id: string
+    textId: string
+    words: number
+    messageId: string
+    senderId: string
+    validate: string
 
     constructor(id=null) {
         super(id)
     }
 
-    getTab = db.define('opinions', {
+    static tab = this.db.define('opinions', {
         id: {
             type: DataTypes.UUID,
             primaryKey: true,
@@ -36,7 +42,32 @@ export  class Opinion extends Tab{
 
     })
 
-    async confirm(member, p, textUUID, who, inter){
+    async setValidate(validate): Promise<void>{
+        this.setAtr("validate", validate)
+    }
+
+    async getWords(): Promise<number>{
+        return this.getAtr("words")
+    }
+
+    async getTextUUID(): Promise<string>{
+        return this.getAtr("textId")
+    }
+
+    async getSenderId(): Promise<string>{
+        return this.getAtr("senderId")
+    }
+
+    /**
+     * is executed when a moderator valids a members's opinion. It hads plumes to the member, 
+     * @param member the opinion's author
+     * @param p the opinion's plumes number
+     * @param textUUID the text which the opinion deals with
+     * @param who validates the opinion
+     * @param inter discord button's interaction
+     * @returns the message sent to confirm the validation
+     */
+    async validation(member, p, textUUID, who, inter): Promise<void>{
         await member.addPlumes(p)
         const plumes = await member.getPlumes()
 
@@ -47,41 +78,24 @@ export  class Opinion extends Tab{
 
         require('../utils/leaderboard.js').edit()
 
+        //increment global server plumes counter (server top channel)
         const counter = await client.channels.fetch(c.channels.counter)
-        await new ParameterId(parameter.plumesTotal).incrementAtr(null, p)
+        counter.setName("PLUMES : " + await new ParameterId(parameter.plumesTotal).incrementAtr("paramId", p))
 
+        //increment global weekly plumes counter (in both cache and db)  for server global special gifts/activities
         await new ParameterId(parameter.weeklyPlumes).incrementAtr("paramId", p)
         require("../config").c.weeklyWords += p
 
-        counter.setName("PLUMES : " + await new ParameterId(parameter.plumesTotal).incrementAtr("paramId", p))
-
         return await sendMes(c.channels.plumes, { embeds: [embed] })
-
     }
 
-    memberOpinionExist(textUUID, id){
-        return this.getTab.count({ where: { textId: textUUID, senderId: id } })
+    async memberOpinionExist(textUUID, id): Promise<boolean>{
+        return this.tab.count({ where: { textId: textUUID, senderId: id } })
             .then(count => {
                 return count !== 0
 
             })
 
-    }
-
-    async setValidate(validate){
-        await this.setAtr("validate", validate)
-    }
-
-    async getWords(){
-        return this.getAtr("words")
-    }
-
-    async getTextUUID(){
-        return this.getAtr("textId")
-    }
-
-    async getSenderId(){
-        return this.getAtr("senderId")
     }
 
 }

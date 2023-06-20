@@ -1,5 +1,5 @@
 
-import {Tab} from "../Tab"
+import {Item} from "../Item"
 import {DataTypes, Op} from "sequelize"
 import {c} from "../../config"
 import {client} from "../../index";
@@ -9,7 +9,7 @@ import { Embed, Message } from "discord.js";
 /**
  * a text's extract object. It links to a text and contains some chapters.
  */
-export class Extract extends Tab{
+export class Extract extends Item{
 
     /**
      * @param id extract uuid
@@ -21,7 +21,7 @@ export class Extract extends Tab{
     /**
      * database extracts tab
      */
-    static tab = db.define('extracts', {
+    static tab = this.db.define('extracts', {
         id: {
             type: DataTypes.UUID,
             primaryKey: true,
@@ -33,10 +33,6 @@ export class Extract extends Tab{
         desc: {
             type: DataTypes.TEXT,
             defaultValue: ''
-        },
-        authorId: {
-            type: DataTypes.STRING,
-            defaultValue: 0
         },
         chap1: {
             type: DataTypes.INTEGER,
@@ -109,6 +105,14 @@ export class Extract extends Tab{
         await new Member(authorId).removeExtractId(this.id)
 
         await this.destroy()
+    }
+
+    async getTextId(): Promise<string>{
+        return this.getAtr("textId")
+    }
+
+    async setTextId(textId: string): Promise<void>{
+        this.setAtr("textId", textId)
     }
 
     async getId_extract(): Promise<string>{
